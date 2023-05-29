@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.go": "go",
+        "limits": "cpp",
+        "stdlib.h": "cpp",
+        "glfw3.h": "cpp",
+        "cmath": "cpp"
+    }
+}
