@@ -143,10 +143,10 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 	for (int x = x1; x < x2; x++) {
 		int y1 = dyb * (x - xs + 0.5) / dx + b1;
 		int y2 = dyt * (x - xs + 0.5) / dx + t1;
-		if (y1 < 1) { y1 = 1; }
-		if (y2 < 1) { y2 = 1; }
-		if (y1 > window_y - 1) { y1 = window_y - 1; }
-		if (y2 > window_y - 1) { y2 = window_y - 1; }
+		if (y1 < 0) { y1 = 0; }
+		if (y2 < 0) { y2 = 0; }
+		if (y1 > window_y) { y1 = window_y; }
+		if (y2 > window_y) { y2 = window_y; }
 		for (int y = y1; y < y2; y++) {
 			draw_pixel(x, y, r, g, b);
 		}
