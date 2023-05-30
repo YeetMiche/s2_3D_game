@@ -30,7 +30,7 @@ typedef struct {
 	int w,a,s,d; //Move
 	int up,down,left,right; //Look
 	int lctrl,space; //Height
-} ButtonKeys; ButtonKeys Keys;
+}ButtonKeys; ButtonKeys Keys;
 
 typedef struct {
 	int x, y, z;
@@ -149,6 +149,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 	if (x1 > window_x - 1) { x1 = window_x - 1; }
 	if (x2 > window_x - 1) { x2 = window_x - 1; }
 
+	glBegin(GL_POINTS);
 	for (int x = x1; x < x2; x++) {
 		int y1 = dyb * (x - xs + 0.5) / dx + b1;
 		int y2 = dyt * (x - xs + 0.5) / dx + t1;
@@ -157,9 +158,11 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 		if (y1 > window_y) { y1 = window_y; }
 		if (y2 > window_y) { y2 = window_y; }
 		for (int y = y1; y < y2; y++) {
-			draw_pixel(x, y, r, g, b);
+			glColor3ub(r,g,b);
+			glVertex2i(x,y);
 		}
 	}
+	glEnd();
 }
 
 void draw_wall(int x, int y, int u, int v, int z1, int z2) {
