@@ -7,15 +7,24 @@
 
 using namespace std;
 
+#define FPS_LIMIT 60
+
 const int res = 1;
 const int window_x = 300;
 const int window_y = 200;
 const int render_scale = 4;
 
+int fps_limit_start;
+int fps = 0;
+int frame = 0;
+int fps_counter_start = 0;
+
 int scaled_x = window_x * render_scale;
 int scaled_y = window_y * render_scale;
 
 int FOV = 200;
+
+
 
 typedef struct {
 	int w,a,s,d; //Move
@@ -249,6 +258,8 @@ void move_player() {
 }
 
 void display(){
+	fps_limit_start = clock();
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	move_player();
@@ -261,6 +272,17 @@ void display(){
 	for (int w = S[s].ws; w<=S[s].we; w++){
 			draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2);
 		}
+	}
+
+	while ((fps_limit_start + 1000/FPS_LIMIT) - clock() > 0){
+		;
+	}
+
+	frame += 1;
+	if (clock() - fps_counter_start > 1000){
+		fps = frame;
+		frame = 0;
+		fps_counter_start = clock();
 	}
 
 	glutPostRedisplay();
