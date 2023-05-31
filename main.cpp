@@ -1,18 +1,20 @@
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <GL/glut.h>
 #include <time.h>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
 
 #define FPS_LIMIT 60
 
-const int res = 1;
-const int window_x = 300;
-const int window_y = 200;
+
 const int render_scale = 4;
+int window_x = 480;
+int window_y = 270;
 
 int fps_limit_start;
 int fps = 0;
@@ -30,6 +32,7 @@ typedef struct {
 	int w,a,s,d; //Move
 	int up,down,left,right; //Look
 	int lctrl,space; //Height
+	int pfov, mfov; //POV change
 }ButtonKeys; ButtonKeys Keys;
 
 typedef struct {
@@ -48,7 +51,7 @@ typedef struct {
 	int ws, we;
 	int z1, z2;
 	int d;
-	int surf[window_x];
+	vector<int> surf;
 	int surface;
 }sectors; sectors S[100];
 
@@ -257,7 +260,8 @@ void move_player() {
 	if (Keys.up == 1) { P.l += 1; }
 	if (Keys.lctrl == 1) { P.z += 1; }
 	if (Keys.space == 1) { P.z -= 1; }
-
+	if (Keys.pfov == 1) { FOV += 1; }
+	if (Keys.mfov == 1) { FOV -= 1; }
 }
 
 void display(){
@@ -290,7 +294,6 @@ void display(){
 
 	glutPostRedisplay();
 	glutSwapBuffers();
-	glutReshapeWindow(scaled_x, scaled_y);
 }
 
 void buttons_up(unsigned char key, int x, int y){
@@ -299,13 +302,16 @@ void buttons_up(unsigned char key, int x, int y){
 	if (key=='w'){Keys.w=0;}
 	if (key=='s'){Keys.s=0;}
 
-	if (key==52){Keys.left=0;}
-	if (key==54){Keys.right=0;}
-	if (key==56){Keys.up=0;}
-	if (key==53){Keys.down=0;}
+	if (key=='j'){Keys.left=0;}
+	if (key=='l'){Keys.right=0;}
+	if (key=='i'){Keys.up=0;}
+	if (key=='k'){Keys.down=0;}
 
-	if (key==32){Keys.space=0;}
-	if (key==17){Keys.lctrl=0;}
+	if (key=='u'){Keys.space=0;}
+	if (key=='m'){Keys.lctrl=0;}
+
+	if (key=='r'){Keys.pfov=0;}
+	if (key=='t'){Keys.mfov=0;}
 }
 
 void buttons_down(unsigned char key, int x, int y){
@@ -314,13 +320,16 @@ void buttons_down(unsigned char key, int x, int y){
 	if (key=='w'){Keys.w=1;}
 	if (key=='s'){Keys.s=1;}
 
-	if (key==52){Keys.left=1;}
-	if (key==54){Keys.right=1;}
-	if (key==56){Keys.up=1;}
-	if (key==53){Keys.down=1;}
+	if (key=='j'){Keys.left=1;}
+	if (key=='l'){Keys.right=1;}
+	if (key=='i'){Keys.up=1;}
+	if (key=='k'){Keys.down=1;}
 
-	if (key==32){Keys.space=1;}
-	if (key==17){Keys.lctrl=1;}
+	if (key=='u'){Keys.space=1;}
+	if (key=='m'){Keys.lctrl=1;}
+
+	if (key=='r'){Keys.pfov=1;}
+	if (key=='t'){Keys.mfov=1;}
 }
 
 
@@ -334,35 +343,14 @@ void init() {
 	import_texture();
 }
 
-// int old_main(int argc, char *argv[]) {
-// 	init();
-// 	int t = 0;
-// 	while (running()) { 
-// 		t += 1;
-// 		move_player();
-
-// 		for (int s = 0; s<100; s++){
-// 			sort_walls(s);
-// 		}
-
-// 		for (int s = 0; s<100; s++){
-// 			for (int w = S[s].ws; w<=S[s].we; w++){
-// 				draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2);
-// 			}
-// 		}
-
-// 		draw_image_3D("tiles/char1.bmp", 80, 10, 40);
-// 		present();
-// 	}
-	
-// 	return 0;
-// }
-
 int main(int argc, char* argv[]){
 	glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(window_x,window_y);
+    window_x = glutGet(GLUT_SCREEN_WIDTH) / render_scale;
+	window_y = glutGet(GLUT_SCREEN_HEIGHT) / render_scale;
+	glutInitWindowSize(window_x,window_y);
     glutCreateWindow("Doom Game");
+	glutFullScreen();
     glPointSize(render_scale);
 	glutDisplayFunc(display);
     glutKeyboardUpFunc(buttons_up);
