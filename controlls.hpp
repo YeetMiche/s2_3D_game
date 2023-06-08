@@ -32,6 +32,8 @@ void buttons_down(unsigned char key, int x, int y){
 	if (key=='t'){Keys.mfov=1;}
 }
 
+
+//can't use this way with second screen
 void mouse_func(int x, int y){
 	if (x <= 0){glutWarpPointer(window_x * render_scale, y);}
 	if (x >= window_x * render_scale - 1){glutWarpPointer(0, y);}
@@ -39,6 +41,13 @@ void mouse_func(int x, int y){
 	glutSetCursor(GLUT_CURSOR_NONE);
 }
 
+//can use this with second screen but the mouse movement is stuttery
+// // void mouse_func(int x, int y){
+// // 	int deltaX = x - window_x * render_scale/2;
+// // 	P.a += deltaX/10;
+// // 	if (deltaX != 0){glutWarpPointer(window_x * render_scale/2, window_y * render_scale/2);}
+// // 	glutSetCursor(GLUT_CURSOR_NONE);
+// // }
 
 void move_player() {
 	int dx = sin(P.a/180*M_PI) * 10.0;
