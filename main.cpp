@@ -55,16 +55,23 @@ typedef struct {
 	int surface;
 }sectors; sectors S[100];
 
-int texture_arr[16384] = {};
+typedef struct {
+	int r,g,b;
+}texture; texture Test[256];
+
+struct tc4 {
+	unsigned int u : 4;
+	unsigned int v : 4;
+};
 
 #include "controlls.hpp"
 
 void import_texture(){
-	FILE* texture_file = fopen("texture.bmp", "r");
+	FILE* texture_file = fopen("test.bmp", "r");
 	if (texture_file != NULL){
 		int i = 0;
 		while(feof(texture_file) == 0){
-			fscanf(texture_file, "%d,", &texture_arr[i]);
+			fscanf(texture_file, "%d,", &Test[i].r);
 			i++;
 		}
 	}
@@ -135,12 +142,26 @@ void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 	*z1 = *z1 + s * (z2 - (*z1));
 }
 
-void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, float angle, int r = 255, int g = 0, int b = 255) {
+void draw_texture(){
+	glBegin(GL_POINTS);
+	for (int x = 0; x<16; x++){
+		for (int y = 0; y<16; y++){
+			glColor3ub(Test[x + y * 16].r, 0,0);
+			glVertex2i(x,y);
+		}
+	}
+}
+
+void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int g = 0, int b = 255) {
 
 	int dyb = b2 - b1;
 	int dyt = t2 - t1;
 	int dx = x2 - x1; if (dx == 0) { dx = 1; }
 	int xs = x1;
+	float xstep, ystep;
+	int ui = 0, vi = 0;
+
+	xstep = (float)16 / (float)(x2 - x1);
 
 	if (x1 < 1) { x1 = 1; }
 	if (x2 < 1) { x2 = 1; }
@@ -151,14 +172,20 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, float angle, int 
 	for (int x = x1; x < x2; x++) {
 		int y1 = dyb * (x - xs + 0.5) / dx + b1;
 		int y2 = dyt * (x - xs + 0.5) / dx + t1;
+	
+		ystep = (float)16 / (float)(y2 - y1);
+		
 		if (y1 < 0) { y1 = 0; }
 		if (y2 < 0) { y2 = 0; }
 		if (y1 > window_y) { y1 = window_y; }
 		if (y2 > window_y) { y2 = window_y; }
+		
 		for (int y = y1; y < y2; y++) {
-			glColor3ub(0,angle, angle);
+			glColor3ub(Test[ui + vi * 16].r,0,0);
 			glVertex2i(x,y);
+			vi += ystep;
 		}
+		ui += xstep;
 	}
 	glEnd();
 }
@@ -167,7 +194,6 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2) {
 	int wx[4], wy[4], wz[4]; 
 	float CS = cos(P.a / 180 * M_PI), SN = sin(P.a / 180 * M_PI);
 	int swp;
-	float wa;
 
 	int sx[4], sy[4];
 
@@ -189,8 +215,6 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2) {
 		wy[1] = y2 * CS + x2 * SN;
 		wy[2] = wy[0];
 		wy[3] = wy[1];
-
-		wa = atan2(wy[1] - wy[0], wx[1] - wx[0]);
 
 		wz[0] = z1 - P.z + ((P.l * wy[0]) / 32);
 		wz[1] = z1 - P.z + ((P.l * wy[1]) / 32);
@@ -216,13 +240,13 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2) {
 		sx[3] = wx[3] * FOV / wy[3] + window_x / 2; sy[3] = wz[3] * FOV / wy[3] + window_y / 2;
 
 		int r, g, b;
-		int color_offset = atan((u - x) / (v - y + 0.00001)) * 10;
+		int color_offset = atan2((u - x) ,(v - y + 0.00001)) * 10;
 
 		r = abs(200 - color_offset);
 		g = abs(170 - color_offset);
 		b = abs(180 - color_offset);
 
-		fill_wall(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3], wa, r, g, b);
+		fill_wall(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3], r, g, b);
 	}
 }
 
@@ -260,6 +284,8 @@ void display(){
 		sort_walls(s);
 	}
 
+	draw_texture();
+
 	// cout << W[S[0].ws].x1 << "," << W[S[0].we].x2 << endl;
 
 	for (int s = 0; s<100; s++){
@@ -286,7 +312,8 @@ void display(){
 void init() {
 	glClearColor(0.12,0.12,0.12,0);
 	gluOrtho2D(0,window_x, window_y, 0);
-	
+	glutWarpPointer(window_x / 2, window_y / 2);
+
 	P.x = 70; P.y = -110; P.z = 20; P.a = 0; P.l = 0;
 	import_walls();
 	import_sectors();
