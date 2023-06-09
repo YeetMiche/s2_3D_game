@@ -57,16 +57,16 @@ typedef struct {
 
 typedef struct {
 	int r,g,b;
-}texture; texture Test[10000];
+}texture; texture Test[1024];
 
 #include "controlls.hpp"
 
 void import_texture(){
-	FILE* texture_file = fopen("test2.bmp", "r");
+	FILE* texture_file = fopen("CLAYBRICKS.bmp", "r");
 	if (texture_file != NULL){
 		int i = 0;
 		while(feof(texture_file) == 0){
-			fscanf(texture_file, "%d,", &Test[i].r);
+			fscanf(texture_file, "%d,%d,%d,", &Test[i].r, &Test[i].g, &Test[i].b);
 			i++;
 		}
 	}
@@ -139,9 +139,9 @@ void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 
 void draw_texture(){
 	glBegin(GL_POINTS);
-	for (int x = 0; x<100; x++){
-		for (int y = 0; y<100; y++){
-			glColor3ub(Test[x + y * 100].r, 0,0);
+	for (int x = 0; x<32; x++){
+		for (int y = 0; y<32; y++){
+			glColor3ub(Test[x + y * 32].r,Test[x + y * 32].g ,Test[x + y * 32].b);
 			glVertex2i(x,y);
 		}
 	}
@@ -157,12 +157,12 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 	float ustep, vstep;
 	float ui = 0;
 
-	ustep = 100 / (x2 - x1 + 0.0000001);
+	ustep = 32 / (x2 - x1 + 0.000000001);
 
-	if (x1 < 1) { ui -= x1*ustep; x1 = 1; }
-	if (x2 < 1) { x2 = 1; }
-	if (x1 > window_x - 1) { x1 = window_x - 1; }
-	if (x2 > window_x - 1) { x2 = window_x - 1; }
+	if (x1 < 0) { ui -= x1*ustep; x1 = 0; }
+	if (x2 < 0) { x2 = 0; }
+	if (x1 > window_x) { x1 = window_x; }
+	if (x2 > window_x) { x2 = window_x; }
 
 	glBegin(GL_POINTS);
 	for (int x = x1; x < x2; x++) {
@@ -170,7 +170,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 		int y2 = dyt * (x - xs + 0.5) / dx + t1;
 
 		float vi = 0;
-		vstep = 100 / (y2-y1 + 0.0000001);
+		vstep = 32 / (y2-y1 + 0.000000001);
 		
 		if (y1 < 0) { vi -= y1*vstep; y1 = 0; }
 		if (y2 < 0) { y2 = 0; }
@@ -178,8 +178,8 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 		if (y2 > window_y) { y2 = window_y; }
 		
 		for (int y = y1; y < y2; y++) {
-			int Pixel = (int) vi * 100 + (int)ui; 
-			glColor3ub(Test[Pixel].r,0,0);
+			int Pixel = (int) vi * 32 + (int)ui; 
+			glColor3ub(Test[Pixel].r,Test[Pixel].g,Test[Pixel].b);
 			glVertex2i(x,y);
 			vi += vstep;
 		}
