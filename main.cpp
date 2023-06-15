@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -57,21 +59,34 @@ typedef struct {
 
 typedef struct {
 	int r,g,b;
-}texture; texture Test[1024];
+}RGB;
 
 #include "controlls.hpp"
 
-void import_texture(){
-	FILE* texture_file = fopen("CLAYBRICKS.bmp", "r");
-	if (texture_file != NULL){
-		int i = 0;
-		while(feof(texture_file) == 0){
-			fscanf(texture_file, "%d,%d,%d,", &Test[i].r, &Test[i].g, &Test[i].b);
-			i++;
-		}
-	}
+class Texture{
+	private:
+	FILE* texture_file;
 	
-}
+	public:
+	vector<RGB> colors; 
+	int ht,vt;
+	Texture(string file_name, int height, int width){
+		ifstream texture_file(file_name);
+		ht = height;
+		vt = width;
+
+		if (texture_file.is_open()){
+			RGB color;
+			char comma;
+			while (texture_file >> color.r >> comma >> color.g >> comma >> color.b >> comma){
+				colors.push_back(color);
+			}
+			texture_file.close();
+		}	
+	}
+};
+
+Texture red_bricks("REDBRICKS.bmp", 32,32);
 
 void import_walls(){
     FILE* wall_file = fopen("walls.txt", "r");
@@ -103,8 +118,8 @@ void import_sectors(){
     }
 }
 
-int distance(int x1, int x2, int y1, int y2){
-	int d = sqrt(pow(x2 - x1, 2) + pow(y2-y1, 2));
+float distance(int x1, int x2, int y1, int y2){
+	float d = sqrt(pow(x2 - x1, 2) + pow(y2-y1, 2));
 	return d;
 }
 
@@ -118,15 +133,6 @@ void sort_walls(int s){
 	}
 }
 
-// void draw_image_offset(std::string filename, int x, int y, float scale = 1) {
-// 	float ix, iy;
-
-// 	ix = x * render_scale - 8 * scale;
-// 	iy = y * render_scale - 16 * scale;
-
-// 	draw_image(filename, ix, iy, scale);
-// }
-
 void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 	float da = *y1;
 	float db = y2;
@@ -137,11 +143,12 @@ void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 	*z1 = *z1 + s * (z2 - (*z1));
 }
 
-void draw_texture(){
+void draw_texture(Texture texture){
 	glBegin(GL_POINTS);
-	for (int x = 0; x<32; x++){
-		for (int y = 0; y<32; y++){
-			glColor3ub(Test[x + y * 32].r,Test[x + y * 32].g ,Test[x + y * 32].b);
+	for (int x = 0; x<texture.ht; x++){
+		for (int y = 0; y<texture.vt; y++){
+			int pixel = x + y*texture.vt;
+			glColor3ub(red_bricks.colors[pixel].r,red_bricks.colors[pixel].g ,red_bricks.colors[pixel].b);
 			glVertex2i(x,y);
 		}
 	}
@@ -155,7 +162,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 	int dx = x2 - x1; if (dx == 0) { dx = 1; }
 	int xs = x1;
 	float ustep, vstep;
-	float ui = 0;
+	float ui = 0, vi = 0;
 
 	ustep = 32 / (x2 - x1 + 0.000000001);
 
@@ -169,7 +176,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 		int y1 = dyb * (x - xs + 0.5) / dx + b1;
 		int y2 = dyt * (x - xs + 0.5) / dx + t1;
 
-		float vi = 0;
+		vi = 0;
 		vstep = 32 / (y2-y1 + 0.000000001);
 		
 		if (y1 < 0) { vi -= y1*vstep; y1 = 0; }
@@ -178,8 +185,8 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 		if (y2 > window_y) { y2 = window_y; }
 		
 		for (int y = y1; y < y2; y++) {
-			int Pixel = (int) vi * 32 + (int)ui; 
-			glColor3ub(Test[Pixel].r,Test[Pixel].g,Test[Pixel].b);
+			int pixel = (int)vi * 32 + (int)ui;
+			glColor3ub(red_bricks.colors[pixel].r,red_bricks.colors[pixel].g,red_bricks.colors[pixel].b);
 			glVertex2i(x,y);
 			vi += vstep;
 		}
@@ -282,7 +289,7 @@ void display(){
 		sort_walls(s);
 	}
 
-	draw_texture();
+	draw_texture(red_bricks);
 
 	// cout << W[S[0].ws].x1 << "," << W[S[0].we].x2 << endl;
 
@@ -315,7 +322,6 @@ void init() {
 	P.x = 70; P.y = -110; P.z = 20; P.a = 0; P.l = 0;
 	import_walls();
 	import_sectors();
-	import_texture();
 }
 
 int main(int argc, char* argv[]){
