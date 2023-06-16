@@ -155,18 +155,18 @@ void draw_texture(Texture texture){
 	glEnd();
 }
 
-void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2) {
+void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 
-	int dyb = b2 - b1;
-	int dyt = t2 - t1;
-	int dx = x2 - x1; if (dx == 0) { dx = 1; }
-	int xs = x1;
+	float dyb = b2 - b1;
+	float dyt = t2 - t1;
+	float dx = x2 - x1; if (dx == 0) { dx = 1;}
+	float xs = x1;
 	float ustep, vstep;
 	float ui = 0, vi = 0;
 
 	ustep = 48 / (x2 - x1 + 0.000000001);
 
-	if (x1 < 0) { ui -= (float)x1*ustep; x1 = 0; }
+	if (x1 < 0) { ui -= x1*ustep; x1 = 0; }
 	if (x2 < 0) { x2 = 0; }
 	if (x1 > window_x) { x1 = window_x; }
 	if (x2 > window_x) { x2 = window_x; }
@@ -179,7 +179,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2) {
 		vi = 0;
 		vstep = 64 / (y2-y1 + 0.000000001);
 		
-		if (y1 < 0) { vi -= (float)y1*vstep; y1 = 0; }
+		if (y1 < 0) { vi -= y1*vstep; y1 = 0; }
 		if (y2 < 0) { y2 = 0; }
 		if (y1 > window_y) { y1 = window_y; }
 		if (y2 > window_y) { y2 = window_y; }
@@ -190,7 +190,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2) {
 			int pixel = (int)vi * 32 + (int)ui;
 			if (pixel >= 32*32) {pixel = 32*32 - 1;}
 			if (pixel < 0) {pixel = 0;}
- 			glColor3ub(red_bricks.colors[pixel].r,red_bricks.colors[pixel].g,red_bricks.colors[pixel].b);
+ 			glColor3ub(red_bricks.colors[pixel].r - co,red_bricks.colors[pixel].g - co,red_bricks.colors[pixel].b - co);
 			glVertex2i(x,y);
 			vi += vstep;
 		}
@@ -248,14 +248,9 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2) {
 		sx[2] = wx[2] * FOV / wy[2] + window_x / 2; sy[2] = wz[2] * FOV / wy[2] + window_y / 2;
 		sx[3] = wx[3] * FOV / wy[3] + window_x / 2; sy[3] = wz[3] * FOV / wy[3] + window_y / 2;
 
-		int r, g, b;
-		int color_offset = atan2((u - x) ,(v - y + 0.00001)) * 10;
+		int color_offset = atan2((u - x), (v - y + 0.00001)) * 7;
 
-		r = abs(200 - color_offset);
-		g = abs(170 - color_offset);
-		b = abs(180 - color_offset);
-
-		fill_wall(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3]);
+		fill_wall(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3], color_offset);
 	}
 }
 
