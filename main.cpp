@@ -155,7 +155,7 @@ void draw_texture(Texture texture){
 	glEnd();
 }
 
-void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int g = 0, int b = 255) {
+void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2) {
 
 	int dyb = b2 - b1;
 	int dyt = t2 - t1;
@@ -164,9 +164,9 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 	float ustep, vstep;
 	float ui = 0, vi = 0;
 
-	ustep = 32 / (x2 - x1 + 0.000000001);
+	ustep = 48 / (x2 - x1 + 0.000000001);
 
-	if (x1 < 0) { ui -= x1*ustep; x1 = 0; }
+	if (x1 < 0) { ui -= (float)x1*ustep; x1 = 0; }
 	if (x2 < 0) { x2 = 0; }
 	if (x1 > window_x) { x1 = window_x; }
 	if (x2 > window_x) { x2 = window_x; }
@@ -177,16 +177,20 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int r = 255, int 
 		int y2 = dyt * (x - xs + 0.5) / dx + t1;
 
 		vi = 0;
-		vstep = 32 / (y2-y1 + 0.000000001);
+		vstep = 64 / (y2-y1 + 0.000000001);
 		
-		if (y1 < 0) { vi -= y1*vstep; y1 = 0; }
+		if (y1 < 0) { vi -= (float)y1*vstep; y1 = 0; }
 		if (y2 < 0) { y2 = 0; }
 		if (y1 > window_y) { y1 = window_y; }
 		if (y2 > window_y) { y2 = window_y; }
 		
 		for (int y = y1; y < y2; y++) {
+			if (vi > 32) {vi -= 32;}
+			if (ui > 32) {ui -= 32;}
 			int pixel = (int)vi * 32 + (int)ui;
-			glColor3ub(red_bricks.colors[pixel].r,red_bricks.colors[pixel].g,red_bricks.colors[pixel].b);
+			if (pixel >= 32*32) {pixel = 32*32 - 1;}
+			if (pixel < 0) {pixel = 0;}
+ 			glColor3ub(red_bricks.colors[pixel].r,red_bricks.colors[pixel].g,red_bricks.colors[pixel].b);
 			glVertex2i(x,y);
 			vi += vstep;
 		}
@@ -251,7 +255,7 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2) {
 		g = abs(170 - color_offset);
 		b = abs(180 - color_offset);
 
-		fill_wall(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3], r, g, b);
+		fill_wall(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3]);
 	}
 }
 
