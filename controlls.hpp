@@ -60,6 +60,6 @@ void move_player() {
 	if (Keys.up == 1) { P.l += 1; }
 	if (Keys.lctrl == 1) { P.z += 1; }
 	if (Keys.space == 1) { P.z -= 1; }
-	if (Keys.pfov == 1) { FOV += 1; }
-	if (Keys.mfov == 1) { FOV -= 1; }
+	if (Keys.pfov == 1) { FOV += 5; }
+	if (Keys.mfov == 1) { FOV -= 5; }
 }
