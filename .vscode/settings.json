@@ -4,6 +4,8 @@
         "limits": "cpp",
         "stdlib.h": "cpp",
         "glfw3.h": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "ostream": "cpp",
+        "iostream": "cpp"
     }
 }

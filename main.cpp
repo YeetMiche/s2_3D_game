@@ -86,7 +86,7 @@ class Texture{
 	}
 };
 
-Texture red_bricks("REDBRICKS.bmp", 32,32);
+Texture red_bricks("./textures/REDBRICKS.bmp", 32,32);
 
 void import_walls(){
     FILE* wall_file = fopen("walls.txt", "r");
@@ -164,7 +164,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 	float ustep, vstep;
 	float ui = 0, vi = 0;
 
-	ustep = 48 / (x2 - x1 + 0.000000001);
+	ustep = red_bricks.vt * 2 / (x2 - x1 + 0.000000001);
 
 	if (x1 < 0) { ui -= x1*ustep; x1 = 0; }
 	if (x2 < 0) { x2 = 0; }
@@ -177,7 +177,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 		int y2 = dyt * (x - xs + 0.5) / dx + t1;
 
 		vi = 0;
-		vstep = 64 / (y2-y1 + 0.000000001);
+		vstep = red_bricks.ht * 2 / (y2-y1 + 0.000000001);
 		
 		if (y1 < 0) { vi -= y1*vstep; y1 = 0; }
 		if (y2 < 0) { y2 = 0; }
@@ -290,7 +290,7 @@ void display(){
 
 	draw_texture(red_bricks);
 
-	// cout << W[S[0].ws].x1 << "," << W[S[0].we].x2 << endl;
+	cout << W[S[0].ws].x1 << "," << W[S[0].we].x2 << endl;
 
 	for (int s = 0; s<100; s++){
 	for (int w = S[s].ws; w<=S[s].we; w++){
