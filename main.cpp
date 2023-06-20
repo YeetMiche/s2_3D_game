@@ -227,15 +227,13 @@ void display(){
 	
 	move_player();
 
-	for (int s = 0; s<100; s++){
+	for (int s = 0; s< S.size(); s++){
 		sort_walls(s);
 	}
 
 	draw_texture(red_bricks);
 
-
-
-	for (int s = 0; s < 100; s++){
+	for (int s = 0; s < S.size(); s++){
 		for (int w = S[s].ws; w<=S[s].we; w++){
 			draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2);
 		}
