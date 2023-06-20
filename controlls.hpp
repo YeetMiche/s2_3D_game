@@ -1,7 +1,16 @@
 #ifndef CONTROLLS_H_
 #define CONTROLLS_H_
 
-extern ButtonKeys Keys;
+#include <GL/glut.h>
+
+extern player P;
+
+typedef struct {
+	int w,a,s,d; //Move
+	int up,down,left,right; //Look
+	int lctrl,space; //Height
+	int pfov, mfov; //POV change
+}buttonKeys; buttonKeys Keys;
 
 void buttons_up(unsigned char key, int x, int y){
 	if (key=='a'){Keys.a=0;}
