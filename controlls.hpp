@@ -1,3 +1,6 @@
+#ifndef CONTROLLS_H_
+#define CONTROLLS_H_
+
 extern ButtonKeys Keys;
 
 void buttons_up(unsigned char key, int x, int y){
@@ -63,3 +66,5 @@ void move_player() {
 	if (Keys.pfov == 1) { FOV += 5; }
 	if (Keys.mfov == 1) { FOV -= 5; }
 }
+
+#endif

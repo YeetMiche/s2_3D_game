@@ -45,23 +45,11 @@ typedef struct {
 }player; player P;
 
 typedef struct {
-	int x1,y1;
-	int x2,y2;
-}walls; walls W[30];
-
-typedef struct {
-	int ws, we;
-	int z1, z2;
-	int d;
-	vector<int> surf;
-	int surface;
-}sectors; sectors S[100];
-
-typedef struct {
 	int r,g,b;
 }RGB;
 
 #include "controlls.hpp"
+#include "world.hpp"
 
 class Texture{
 	private:
@@ -87,51 +75,6 @@ class Texture{
 };
 
 Texture red_bricks("./textures/REDBRICKS.bmp", 32,32);
-
-void import_walls(){
-    FILE* wall_file = fopen("walls.txt", "r");
-    if (wall_file != NULL){
-        int i = 0;
-        while (feof(wall_file) == 0){
-            fscanf(wall_file, "%d,%d,%d,%d\n", &W[i].x1, &W[i].y1, &W[i].x2, &W[i].y2);
-            i++;
-        }
-    }
-    else{
-        printf("\n\n Error while trying to open wall file!\n\n");
-        exit(-1);
-    }
-}
-
-void import_sectors(){
-    FILE* sector_file = fopen("sectors.txt", "r");
-    if (sector_file != NULL){
-        int i = 0;
-        while (feof(sector_file) == 0){
-            fscanf(sector_file, "%d,%d,%d,%d\n", &S[i].ws, &S[i].we, &S[i].z1, &S[i].z2);
-            i++;
-        }
-    }
-    else{
-        printf("\n\n Error while trying to open wall file!\n\n");
-        exit(-1);
-    }
-}
-
-float distance(int x1, int x2, int y1, int y2){
-	float d = sqrt(pow(x2 - x1, 2) + pow(y2-y1, 2));
-	return d;
-}
-
-void sort_walls(int s){
-	for (int i = S[s].ws; i < S[s].we - 1; i++){
-		for (int n = S[s].ws; n < S[s].we - 1 - i; n++){
-			if (distance((W[n].x2 + W[n].x1)/2, P.x, (W[n].y2 + W[n].y1)/2, P.y) < distance((W[n+1].x2 + W[n+1].x1)/2, P.x, (W[n+1].y2 + W[n+1].y1)/2, P.y)) {
-				walls swp = W[n + 1]; W[n + 1] = W[n]; W[n] = swp;
-			}
-		}
-	}
-}
 
 void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 	float da = *y1;
@@ -290,10 +233,10 @@ void display(){
 
 	draw_texture(red_bricks);
 
-	cout << W[S[0].ws].x1 << "," << W[S[0].we].x2 << endl;
 
-	for (int s = 0; s<100; s++){
-	for (int w = S[s].ws; w<=S[s].we; w++){
+
+	for (int s = 0; s < 100; s++){
+		for (int w = S[s].ws; w<=S[s].we; w++){
 			draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2);
 		}
 	}
