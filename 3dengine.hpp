@@ -10,9 +10,10 @@
 
 using namespace std;
 
-extern int window_x;
-extern int window_y;
+extern int window_x, window_y;
 extern int FOV;
+extern const int render_scale;
+extern int scaled_x, scaled_y;
 
 typedef struct {
 	int x, y, z;
@@ -60,13 +61,13 @@ void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 	*z1 = *z1 + s * (z2 - (*z1));
 }
 
-void draw_texture(Texture texture){
+void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
 	glBegin(GL_POINTS);
-	for (int x = 0; x<texture.ht; x++){
-		for (int y = 0; y<texture.vt; y++){
-			int pixel = x + y*texture.vt;
+	for (int xi = 0; xi<texture.ht * scale; xi++){
+		for (int yi = 0; yi<texture.vt * scale; yi++){
+			int pixel = static_cast<int>(xi / scale) + static_cast<int>(yi / scale)*texture.vt;
 			glColor3ub(red_bricks.colors[pixel].r,red_bricks.colors[pixel].g ,red_bricks.colors[pixel].b);
-			glVertex2i(x,y);
+			glVertex2i(xi + x,yi + y);
 		}
 	}
 	glEnd();
@@ -169,6 +170,30 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2) {
 
 		fill_wall(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3], color_offset);
 	}
+}
+
+void draw_texture_3D(Texture texture, int x, int y, int z) {
+	int ix, iy, iz;
+	float scale;
+	float CS = cos(P.a / 180 * M_PI), SN = sin(P.a / 180 * M_PI);
+    
+    x = x - P.x;
+	y = y - P.y;
+    z = z - P.z;
+
+	ix = x * CS - y * SN;
+	iy = y * CS + x * SN;
+	iz = z - P.z + ((P.l * iy) / 32);
+
+	if (iy < 1) { return; }
+
+	ix = ix * FOV / iy + window_x / 2;
+	iy = iz * FOV / iy + window_y / 2;
+
+	scale = (FOV * 3) / (sqrt(pow(P.x - x, 2) + pow(P.y - y, 2))) * render_scale;
+
+	draw_texture(texture, ix, iy, scale);
+
 }
 
 #endif /*THREED_ENGINE_H_*/

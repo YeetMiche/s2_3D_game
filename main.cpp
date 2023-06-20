@@ -32,34 +32,14 @@ int FOV = 200;
 #include "controlls.hpp"
 #include "world.hpp"
 
-void draw_image_3D(std::string filename, int x, int y, int z) {
-	int ix, iy, iz;
-	float scale;
-	float CS = cos(P.a / 180 * M_PI), SN = sin(P.a / 180 * M_PI);
-	
-	y = y - P.y;
-
-	ix = x * CS - y * SN;
-	iy = y * CS + x * SN;
-	iz = z - P.z + ((P.l * iy) / 32);
-
-	if (iy < 1) { return; }
-
-	ix = ix * FOV / iy + window_x / 2;
-	iy = iz * FOV / iy + window_y / 2;
-
-	scale = (FOV * 3) / (sqrt(pow(P.x - x, 2) + pow(P.y - y, 2))) * render_scale;
-
-	
-
-}
-
 void display(){
 	fps_limit_start = clock();
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	move_player();
+
+	draw_texture_3D(red_bricks, 20,20,-50);
 
 	for (int s = 0; s< S.size(); s++){
 		sort_walls(s);
