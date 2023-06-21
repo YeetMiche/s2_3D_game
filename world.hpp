@@ -71,7 +71,7 @@ float distance(int x1, int x2, int y1, int y2){
 }
 
 void sort_walls(int s){
-	for (int i = S[s].ws; i < S[s].we; i++){
+	for (int i = 0; i < S[s].we; i++){
 		for (int n = S[s].ws; n < S[s].we - i; n++){
 			if (distance((W[n].x2 + W[n].x1)/2, P.x, (W[n].y2 + W[n].y1)/2, P.y) < distance((W[n+1].x2 + W[n+1].x1)/2, P.x, (W[n+1].y2 + W[n+1].y1)/2, P.y)) {
 				Wall swp = W[n + 1]; W[n + 1] = W[n]; W[n] = swp;
