@@ -39,11 +39,13 @@ void display(){
 	
 	move_player();
 
-	draw_texture_3D(red_bricks, 20,20,-50);
-
 	for (int s = 0; s< S.size(); s++){
 		sort_walls(s);
 	}
+
+
+
+	sort_sectors();
 
 	for (int s = 0; s < S.size(); s++){
 		for (int w = S[s].ws; w<=S[s].we; w++){
