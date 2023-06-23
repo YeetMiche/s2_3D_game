@@ -84,7 +84,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 
 	ustep = red_bricks.vt * 2 / (x2 - x1 + 0.000000001);
 
-	if (x1 < 0) { ui -= x1*ustep; x1 = 0; }
+	if (x1 < 0) { ui -= (float)x1*ustep; x1 = 0; }
 	if (x2 < 0) { x2 = 0; }
 	if (x1 > window_x) { x1 = window_x; }
 	if (x2 > window_x) { x2 = window_x; }
@@ -97,7 +97,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 		vi = 0;
 		vstep = red_bricks.ht * 2 / (y2-y1 + 0.000000001);
 		
-		if (y1 < 0) { vi -= y1*vstep; y1 = 0; }
+		if (y1 < 0) { vi -= (float)y1*vstep; y1 = 0; }
 		if (y2 < 0) { y2 = 0; }
 		if (y1 > window_y) { y1 = window_y; }
 		if (y2 > window_y) { y2 = window_y; }

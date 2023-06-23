@@ -3,11 +3,8 @@
 #include <GL/glut.h>
 #include <time.h>
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
 #include <vector>
 #include <string>
-#include <fstream>
 
 using namespace std;
 
@@ -45,7 +42,7 @@ void display(){
 
 
 
-	sort_sectors();
+	// sort_sectors();
 
 	for (int s = 0; s < S.size(); s++){
 		for (int w = S[s].ws; w<=S[s].we; w++){

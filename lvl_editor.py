@@ -14,8 +14,8 @@ with open(wall_file, "w") as wfile:
             z1 = int(obj.name.split(":")[0])
             z2 = int(obj.name.split(":")[1])
             for e in edges:
-                start = obj.data.vertices[e.vertices[0]].co
-                end = obj.data.vertices[e.vertices[1]].co
+                start = obj.data.vertices[e.vertices[0]].co * 100
+                end = obj.data.vertices[e.vertices[1]].co * 100
                 wfile.write(f"{int(start[0])},{int(start[1])},{int(end[0])},{int(end[1])}\n")
                 wall_end += 1
             sfile.write(f"{int(wall_start)},{int(wall_end)},{int(z1)},{int(z2)}\n")
