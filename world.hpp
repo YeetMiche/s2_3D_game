@@ -81,7 +81,7 @@ void sort_walls(int s){
 }
 
 int sector_distance(Sector sector){
-    int x = 0, y = 0;
+    float x = 0, y = 0;
 
     for (int i = sector.ws; i < sector.we; i++){
         x += W[i].x1;
@@ -91,6 +91,9 @@ int sector_distance(Sector sector){
     x/=sector.we;
     y/=sector.we;
 
+    x -= P.x;
+    y -= P.y;
+
     return sqrt(x*x + y*y);
 }
 
@@ -98,8 +101,7 @@ int sector_distance(Sector sector){
 
 void sort_sectors(){
     for (int i = 0; i < S.size(); i++){
-        for (int n = 0; n < S.size() - i; n++){
-            cout << i << "," << n << endl;
+        for (int n = 0; n < S.size() - i - 1; n++){
             if (sector_distance(S[n]) < sector_distance(S[n+1])){
                 Sector swp = S[n+1];
                 S[n+1] = S[n];

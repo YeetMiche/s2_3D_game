@@ -105,9 +105,11 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 		for (int y = y1; y < y2; y++) {
 			if (vi > 32) {vi -= 32;}
 			if (ui > 32) {ui -= 32;}
+
 			int pixel = (int)vi * 32 + (int)ui;
 			if (pixel >= 32*32) {pixel = 32*32 - 1;}
 			if (pixel < 0) {pixel = 0;}
+			
  			glColor3ub(red_bricks.colors[pixel].r - co,red_bricks.colors[pixel].g - co,red_bricks.colors[pixel].b - co);
 			glVertex2i(x,y);
 			vi += vstep;

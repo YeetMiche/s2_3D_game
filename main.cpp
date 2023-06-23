@@ -40,9 +40,7 @@ void display(){
 		sort_walls(s);
 	}
 
-
-
-	// sort_sectors();
+	sort_sectors();
 
 	for (int s = 0; s < S.size(); s++){
 		for (int w = S[s].ws; w<=S[s].we; w++){
