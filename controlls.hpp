@@ -53,13 +53,13 @@ void mouse_func(int x, int y){
 	glutSetCursor(GLUT_CURSOR_NONE);
 }
 
-//can use this with second screen but the mouse movement is stuttery
-// // void mouse_func(int x, int y){
-// // 	int deltaX = x - window_x * render_scale/2;
-// // 	P.a += deltaX/10;
-// // 	if (deltaX != 0){glutWarpPointer(window_x * render_scale/2, window_y * render_scale/2);}
-// // 	glutSetCursor(GLUT_CURSOR_NONE);
-// // }
+/*can use this with second screen but the mouse movement is stuttery*/
+// void mouse_func(int x, int y){
+// 	int deltaX = x - window_x * render_scale/2;
+// 	P.a += deltaX/10;
+// 	if (deltaX != 0){glutWarpPointer(window_x * render_scale/2, window_y * render_scale/2);}
+// 	glutSetCursor(GLUT_CURSOR_NONE);
+// }
 
 void move_player() {
 	int dx = sin(P.a/180*M_PI) * 10.0;
