@@ -72,7 +72,18 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co, Sector se
 			if (pixel >= pow(texture.ht,2)) {pixel = pow(texture.ht,2) - 1;}
 			if (pixel < 0) {pixel = 0;}
 			
- 			glColor3ub(texture.colors[pixel].r - co,texture.colors[pixel].g - co,texture.colors[pixel].b - co);
+			RGB color;
+			color.r = texture.colors[pixel].r - co;
+			if (color.r < 0) {color.r = 0;}
+			if (color.r > 255) {color.r = 255;}
+			color.g = texture.colors[pixel].g - co;
+			if (color.g < 0) {color.g = 0;}
+			if (color.g > 255) {color.g = 255;}
+			color.b = texture.colors[pixel].b - co;
+			if (color.b < 0) {color.b = 0;}
+			if (color.b > 255) {color.b = 255;}
+
+ 			glColor3ub(color.r, color.g, color.b);
 			glVertex2i(x,y);
 			vi += vstep;
 		}

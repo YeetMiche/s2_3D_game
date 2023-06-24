@@ -44,17 +44,4 @@ class Sector{
 
 vector<Sector> S;
 
-void import_walls(){
-    ifstream wall_file("walls.txt");
-
-    if (wall_file.is_open()){
-        char comma;
-        int x1,y1,x2,y2;
-        while (wall_file >> x1 >> comma >> y1 >> comma >> x2 >> comma >> y2){
-            W.push_back(Wall(x1,y1,x2,y2));
-        } 
-    }
-}
-
-
 #endif

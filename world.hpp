@@ -6,14 +6,27 @@
 #include <fstream>
 using namespace std;
 
+void import_walls(){
+    ifstream wall_file("walls.txt");
+
+    if (wall_file.is_open()){
+        char comma;
+        int x1,y1,x2,y2;
+        while (wall_file >> x1 >> comma >> y1 >> comma >> x2 >> comma >> y2){
+            W.push_back(Wall(x1,y1,x2,y2));
+        } 
+    }
+}
+
 void import_sectors(){
     ifstream sector_file("sectors.txt");
 
     if (sector_file.is_open()){
         char comma;
         int ws,we,z1,z2;
-        while (sector_file >> ws >> comma >> we >> comma >> z1 >> comma >> z2){
-            S.push_back(Sector(ws,we,z1,z2));
+        int texID;
+        while (sector_file >> ws >> comma >> we >> comma >> z1 >> comma >> z2 >> comma >> texID){
+            S.push_back(Sector(ws,we,z1,z2, texID));
         } 
     }
 }
