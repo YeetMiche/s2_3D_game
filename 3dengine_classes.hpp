@@ -53,8 +53,8 @@ class Texture{
 
 vector<Texture> texture_list;
 void create_textures(){
-	texture_list.push_back(Texture("./texture/test.bmp", 16,16));
 	texture_list.push_back(Texture("./textures/GRAYBIG_c.bmp", 128,128));
+	texture_list.push_back(Texture("./texture/test.bmp", 16,16));
 }
 
 #endif

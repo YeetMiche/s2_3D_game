@@ -73,6 +73,7 @@ void init() {
 	P.x = 70; P.y = -110; P.z = 20; P.a = 0; P.l = 0;
 	import_walls();
 	import_sectors();
+	create_textures();
 }
 
 int main(int argc, char* argv[]){

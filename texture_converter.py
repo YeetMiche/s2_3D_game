@@ -1,9 +1,9 @@
 import cv2 as cv
 
-file_name = "sky"
-file_type = ".bmp"
-x_size = 64
-y_size = 64
+file_name = "test"
+file_type = ".png"
+x_size = 16
+y_size = 16
 
 
 img = cv.imread(file_name + file_type)
