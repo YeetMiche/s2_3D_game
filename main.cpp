@@ -25,6 +25,8 @@ int scaled_y = window_y * render_scale;
 
 int FOV = 200;
 
+#include "3dengine_classes.hpp"
+#include "world_classes.hpp"
 #include "3dengine.hpp"
 #include "controlls.hpp"
 #include "world.hpp"
@@ -44,7 +46,7 @@ void display(){
 
 	for (int s = 0; s < S.size(); s++){
 		for (int w = S[s].ws; w<=S[s].we; w++){
-			draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2);
+			draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2, S[s]);
 		}
 	}
 

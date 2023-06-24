@@ -10,54 +10,6 @@
 
 using namespace std;
 
-extern int window_x, window_y;
-extern int FOV;
-extern const int render_scale;
-extern int scaled_x, scaled_y;
-
-typedef struct {
-	int x, y, z;
-	float a;
-	int l;
-
-}player; player P;
-
-typedef struct {
-	int r,g,b;
-}RGB;
-
-class Texture{
-	private:
-	FILE* texture_file;
-	
-	public:
-	vector<RGB> colors; 
-	int ht,vt;
-	
-	float uscale;
-	float vscale;
-
-	Texture(string file_name, int height, int width, float _uscale = 1, float _vscale = 1){
-		ifstream texture_file(file_name);
-		ht = height;
-		vt = width;
-
-		uscale = _uscale;
-		vscale = _vscale;
-
-		if (texture_file.is_open()){
-			RGB color;
-			char comma;
-			while (texture_file >> color.r >> comma >> color.g >> comma >> color.b >> comma){
-				colors.push_back(color);
-			}
-			texture_file.close();
-		}	
-	}
-};
-
-Texture empty_texture("./texture/test.bmp", 16,16);
-Texture red_bricks("./textures/GRAYBIG_c.bmp", 128,128);
 
 void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 	float da = *y1;
@@ -74,14 +26,14 @@ void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
 	for (int xi = 0; xi<texture.ht * scale; xi++){
 		for (int yi = 0; yi<texture.vt * scale; yi++){
 			int pixel = static_cast<int>(xi / scale) + static_cast<int>(yi / scale)*texture.vt;
-			glColor3ub(red_bricks.colors[pixel].r,red_bricks.colors[pixel].g ,red_bricks.colors[pixel].b);
+			glColor3ub(texture.colors[pixel].r,texture.colors[pixel].g ,texture.colors[pixel].b);
 			glVertex2i(xi + x,yi + y);
 		}
 	}
 	glEnd();
 }
 
-void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
+void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co, Sector sector) {
 
 	float dyb = b2 - b1;
 	float dyt = t2 - t1;
@@ -90,7 +42,9 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 	float ustep, vstep;
 	float ui = 0, vi = 0;
 
-	ustep = red_bricks.vt * red_bricks.uscale / (x2 - x1 + 0.000000001);
+	Texture texture = texture_list[sector.textureID];
+
+	ustep = texture.vt * sector.uscale / (x2 - x1 + 0.000000001);
 
 	if (x1 < 0) { ui -= x1*ustep; x1 = 0; }
 	if (x2 < 0) { x2 = 0; }
@@ -103,7 +57,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 		int y2 = dyt * (x - xs + 0.5) / dx + t1;
 
 		vi = 0;
-		vstep = red_bricks.ht * red_bricks.vscale / (y2-y1 + 0.000000001);
+		vstep = texture.ht * sector.vscale / (y2-y1 + 0.000000001);
 		
 		if (y1 < 0) { vi -= y1*vstep; y1 = 0; }
 		if (y2 < 0) { y2 = 0; }
@@ -111,14 +65,14 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 		if (y2 > window_y) { y2 = window_y; }
 		
 		for (int y = y1; y < y2; y++) {
-			if (vi > red_bricks.ht) {vi -= red_bricks.ht;}
-			if (ui > red_bricks.vt) {ui -= red_bricks.vt;}
+			if (vi > texture.ht) {vi -= texture.ht;}
+			if (ui > texture.vt) {ui -= texture.vt;}
 
-			int pixel = (int)vi * red_bricks.ht + (int)ui;
-			if (pixel >= pow(red_bricks.ht,2)) {pixel = pow(red_bricks.ht,2) - 1;}
+			int pixel = (int)vi * texture.ht + (int)ui;
+			if (pixel >= pow(texture.ht,2)) {pixel = pow(texture.ht,2) - 1;}
 			if (pixel < 0) {pixel = 0;}
 			
- 			glColor3ub(red_bricks.colors[pixel].r - co,red_bricks.colors[pixel].g - co,red_bricks.colors[pixel].b - co);
+ 			glColor3ub(texture.colors[pixel].r - co,texture.colors[pixel].g - co,texture.colors[pixel].b - co);
 			glVertex2i(x,y);
 			vi += vstep;
 		}
@@ -127,7 +81,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 	glEnd();
 }
 
-void draw_wall(int x, int y, int u, int v, int z1, int z2) {
+void draw_wall(int x, int y, int u, int v, int z1, int z2, Sector sector) {
 	int wx[4], wy[4], wz[4]; 
 	float CS = cos(P.a / 180 * M_PI), SN = sin(P.a / 180 * M_PI);
 	int swp;
@@ -176,7 +130,7 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2) {
 
 		int color_offset = atan2((u - x), (v - y + 0.00001)) * 7;
 
-		fill_wall(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3], color_offset);
+		fill_wall(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3], color_offset, sector);
 	}
 }
 
