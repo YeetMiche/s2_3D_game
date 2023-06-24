@@ -33,10 +33,17 @@ class Texture{
 	public:
 	vector<RGB> colors; 
 	int ht,vt;
-	Texture(string file_name, int height, int width){
+	
+	float uscale;
+	float vscale;
+
+	Texture(string file_name, int height, int width, float _uscale = 1, float _vscale = 1){
 		ifstream texture_file(file_name);
 		ht = height;
 		vt = width;
+
+		uscale = _uscale;
+		vscale = _vscale;
 
 		if (texture_file.is_open()){
 			RGB color;
@@ -49,7 +56,8 @@ class Texture{
 	}
 };
 
-Texture red_bricks("./textures/REDBRICKS.bmp", 32,32);
+Texture empty_texture("./texture/test.bmp", 16,16);
+Texture red_bricks("./textures/GRAYBIG_c.bmp", 128,128);
 
 void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 	float da = *y1;
@@ -82,9 +90,9 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 	float ustep, vstep;
 	float ui = 0, vi = 0;
 
-	ustep = red_bricks.vt * 2 / (x2 - x1 + 0.000000001);
+	ustep = red_bricks.vt * red_bricks.uscale / (x2 - x1 + 0.000000001);
 
-	if (x1 < 0) { ui -= (float)x1*ustep; x1 = 0; }
+	if (x1 < 0) { ui -= x1*ustep; x1 = 0; }
 	if (x2 < 0) { x2 = 0; }
 	if (x1 > window_x) { x1 = window_x; }
 	if (x2 > window_x) { x2 = window_x; }
@@ -95,19 +103,19 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co) {
 		int y2 = dyt * (x - xs + 0.5) / dx + t1;
 
 		vi = 0;
-		vstep = red_bricks.ht * 2 / (y2-y1 + 0.000000001);
+		vstep = red_bricks.ht * red_bricks.vscale / (y2-y1 + 0.000000001);
 		
-		if (y1 < 0) { vi -= (float)y1*vstep; y1 = 0; }
+		if (y1 < 0) { vi -= y1*vstep; y1 = 0; }
 		if (y2 < 0) { y2 = 0; }
 		if (y1 > window_y) { y1 = window_y; }
 		if (y2 > window_y) { y2 = window_y; }
 		
 		for (int y = y1; y < y2; y++) {
-			if (vi > 32) {vi -= 32;}
-			if (ui > 32) {ui -= 32;}
+			if (vi > red_bricks.ht) {vi -= red_bricks.ht;}
+			if (ui > red_bricks.vt) {ui -= red_bricks.vt;}
 
-			int pixel = (int)vi * 32 + (int)ui;
-			if (pixel >= 32*32) {pixel = 32*32 - 1;}
+			int pixel = (int)vi * red_bricks.ht + (int)ui;
+			if (pixel >= pow(red_bricks.ht,2)) {pixel = pow(red_bricks.ht,2) - 1;}
 			if (pixel < 0) {pixel = 0;}
 			
  			glColor3ub(red_bricks.colors[pixel].r - co,red_bricks.colors[pixel].g - co,red_bricks.colors[pixel].b - co);
@@ -130,8 +138,6 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2) {
 
 		int x1 = x - P.x, y1 = y - P.y;
 		int x2 = u - P.x, y2 = v - P.y;
-
-		
 
 		if (loop == 1) { swp = x1; x1 = x2; x2 = swp; swp = y1; y1 = y2; y2 = swp; }
 

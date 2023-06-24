@@ -2,11 +2,11 @@
 #define WORLD_H_
 
 #include <vector>
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
 #include <fstream>
 using namespace std;
+
+extern Texture empty_texture;
 
 class Wall{
     public:
@@ -30,12 +30,14 @@ class Sector{
     int d;
     vector<int> surf;
     int surface;
+    int textureID;
 
-    Sector(int _ws, int _we, int _z1, int _z2){
+    Sector(int _ws, int _we, int _z1, int _z2, int _textureID = 0){
         ws = _ws;
         we = _we;
         z1 = _z1;
         z2 = _z2;
+        textureID = _textureID;
     }
 };
 
