@@ -88,8 +88,8 @@ int sector_distance(Sector sector){
         y += W[i].y1;
     }
 
-    x/=sector.we;
-    y/=sector.we;
+    x/=(sector.we - sector.ws);
+    y/=(sector.we - sector.ws);
 
     x -= P.x;
     y -= P.y;
@@ -102,6 +102,7 @@ int sector_distance(Sector sector){
 void sort_sectors(){
     for (int i = 0; i < S.size(); i++){
         for (int n = 0; n < S.size() - i - 1; n++){
+            cout << "sorting sector " << n << endl;
             if (sector_distance(S[n]) < sector_distance(S[n+1])){
                 Sector swp = S[n+1];
                 S[n+1] = S[n];
