@@ -37,6 +37,7 @@ void display(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	move_player();
+	draw_outline();
 
 	for (int s = 0; s< S.size(); s++){
 		sort_walls(s);

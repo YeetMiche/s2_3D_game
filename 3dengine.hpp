@@ -63,7 +63,8 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co, Sector se
 		if (y2 < 0) { y2 = 0; }
 		if (y1 > window_y) { y1 = window_y; }
 		if (y2 > window_y) { y2 = window_y; }
-		
+		sector.surfx.push_back(x);
+		sector.surfy.push_back(y1);
 		for (int y = y1; y < y2; y++) {
 			if (vi > texture.ht) {vi -= texture.ht;}
 			if (ui > texture.vt) {ui -= texture.vt;}
@@ -167,6 +168,16 @@ void draw_texture_3D(Texture texture, int x, int y, int z) {
 
 	draw_texture(texture, ix, iy, scale);
 
+}
+
+void draw_outline(){
+	glBegin(GL_POINTS);
+	for (int x = 0; x < S[0].surfx.size(); x++){
+		for (int y = 0; y < S[0].surfy.size(); y++){
+			glVertex2i(x,y);
+		}
+	}
+	glEnd();
 }
 
 #endif /*THREED_ENGINE_H_*/

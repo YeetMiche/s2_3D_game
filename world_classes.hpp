@@ -6,6 +6,8 @@
 #include <fstream>
 using namespace std;
 
+
+
 class Wall{
     public:
     int x1,y1;
@@ -26,7 +28,8 @@ class Sector{
     int ws, we;
     int z1,z2;
     int d;
-    vector<int> surf;
+    vector<int> surfx;
+    vector<int> surfy;
     int surface;
     int textureID;
     float uscale, vscale;
