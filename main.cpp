@@ -19,6 +19,7 @@ int fps_limit_start;
 int fps = 0;
 int frame = 0;
 int fps_counter_start = 0;
+int gameFrame = 0;
 
 int scaled_x = window_x * render_scale;
 int scaled_y = window_y * render_scale;
@@ -37,7 +38,6 @@ void display(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	move_player();
-	draw_outline();
 
 	for (int s = 0; s< S.size(); s++){
 		sort_walls(s);
@@ -48,18 +48,23 @@ void display(){
 	for (int s = 0; s < S.size(); s++){
 		for (int w = S[s].ws; w<=S[s].we; w++){
 			draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2, S[s]);
+
 		}
 	}
-
+	
 	while ((fps_limit_start + 1000/FPS_LIMIT) - clock() > 0){
 		;
 	}
+
+	draw_texture_3D(texture_list[0], -150, 100, 70, 0.1);
 
 	frame += 1;
 	if (clock() - fps_counter_start > 1000){
 		fps = frame;
 		frame = 0;
 		fps_counter_start = clock();
+
+		gameFrame += 1;
 	}
 
 	glutPostRedisplay();

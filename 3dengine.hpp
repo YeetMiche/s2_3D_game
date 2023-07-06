@@ -22,6 +22,10 @@ void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 }
 
 void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
+	
+	x -= (texture.ht * scale) / 2;
+	y -= texture.vt * scale;
+	
 	glBegin(GL_POINTS);
 	for (int xi = 0; xi<texture.ht * scale; xi++){
 		for (int yi = 0; yi<texture.vt * scale; yi++){
@@ -63,8 +67,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co, Sector se
 		if (y2 < 0) { y2 = 0; }
 		if (y1 > window_y) { y1 = window_y; }
 		if (y2 > window_y) { y2 = window_y; }
-		sector.surfx.push_back(x);
-		sector.surfy.push_back(y1);
+
 		for (int y = y1; y < y2; y++) {
 			if (vi > texture.ht) {vi -= texture.ht;}
 			if (ui > texture.vt) {ui -= texture.vt;}
@@ -146,9 +149,8 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2, Sector sector) {
 	}
 }
 
-void draw_texture_3D(Texture texture, int x, int y, int z) {
+void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 	int ix, iy, iz;
-	float scale;
 	float CS = cos(P.a / 180 * M_PI), SN = sin(P.a / 180 * M_PI);
     
     x = x - P.x;
@@ -164,20 +166,14 @@ void draw_texture_3D(Texture texture, int x, int y, int z) {
 	ix = ix * FOV / iy + window_x / 2;
 	iy = iz * FOV / iy + window_y / 2;
 
-	scale = (FOV * 3) / (sqrt(pow(P.x - x, 2) + pow(P.y - y, 2))) * render_scale;
+	scale = (FOV * 3) / (sqrt(pow(P.x - x, 2) + pow(P.y - y, 2))) * render_scale * scale;
 
 	draw_texture(texture, ix, iy, scale);
-
-}
-
-void draw_outline(){
 	glBegin(GL_POINTS);
-	for (int x = 0; x < S[0].surfx.size(); x++){
-		for (int y = 0; y < S[0].surfy.size(); y++){
-			glVertex2i(x,y);
-		}
-	}
+	glColor3ub(255,0,255);
+	glVertex2i(ix,iy);
 	glEnd();
+
 }
 
 #endif /*THREED_ENGINE_H_*/
