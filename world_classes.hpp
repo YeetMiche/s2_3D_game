@@ -12,6 +12,7 @@ class Wall{
     public:
     int x1,y1;
     int x2,y2;
+    int distance;
 
     Wall(int _x1, int _y1, int _x2, int _y2){
         x1 = _x1;
@@ -46,5 +47,20 @@ class Sector{
 };
 
 vector<Sector> S;
+
+class Object{
+    public:
+    int x,y,z;
+    float scale;
+    int textureID;
+
+    Object(int _x, int _y, int _z, int _textureID = 0, float _scale = 1){
+        x = _x, y = _y, z = _z;
+        textureID = _textureID;
+        scale = _scale;
+    }
+};
+
+vector<Object> Obj;
 
 #endif

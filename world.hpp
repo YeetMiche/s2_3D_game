@@ -31,15 +31,25 @@ void import_sectors(){
     }
 }
 
+void import_objects(){
+    Obj.push_back(Object(-150,100,70,0,0.1));
+}
+
 float distance(int x1, int x2, int y1, int y2){
 	float d = sqrt(pow(x2 - x1, 2) + pow(y2-y1, 2));
 	return d;
 }
 
+void calculate_wall_distance(){
+    for (int i = 0; i < W.size(); i++){
+        W[i].distance = distance((W[i].x2 + W[i].x1)/2, P.x, (W[i].y2 + W[i].y1)/2, P.y);
+    }
+}   
+
 void sort_walls(int s){
 	for (int i = 0; i < S[s].we; i++){
 		for (int n = S[s].ws; n < S[s].we - i; n++){
-			if (distance((W[n].x2 + W[n].x1)/2, P.x, (W[n].y2 + W[n].y1)/2, P.y) < distance((W[n+1].x2 + W[n+1].x1)/2, P.x, (W[n+1].y2 + W[n+1].y1)/2, P.y)) {
+			if (W[n].distance < W[n+1].distance) {
 				Wall swp = W[n + 1]; W[n + 1] = W[n]; W[n] = swp;
 			}
 		}
