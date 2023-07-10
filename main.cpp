@@ -47,6 +47,8 @@ void display(){
 
 	sort_sectors();
 
+	draw_floor();
+
 	for (int s = 0; s < S.size(); s++){
 		for (int w = S[s].ws; w<=S[s].we; w++){
 			for (int o = 0; o < Obj.size(); o++){
@@ -60,6 +62,7 @@ void display(){
 		}
 	}
 	
+
 	while ((fps_limit_start + 1000/FPS_LIMIT) - clock() > 0){
 		;
 	}
@@ -84,7 +87,7 @@ void init() {
 	gluOrtho2D(0,window_x, window_y, 0);
 	glutWarpPointer(window_x / 2, window_y / 2);
 
-	P.x = 70; P.y = -110; P.z = 20; P.a = 0; P.l = 0;
+	P.x = 170; P.y = -110; P.z = 20; P.a = 0; P.l = 0;
 	import_walls();
 	import_sectors();
 	import_objects();

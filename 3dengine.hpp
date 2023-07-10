@@ -167,7 +167,7 @@ void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 	ix = x * CS - y * SN;
 	iy = y * CS + x * SN;
 	iz = z - P.z + ((P.l * iy) / 32);
-	if (y < 1) { return; }
+	if (iy < 1) { return; }
 	if (sqrt(pow(x,2) + pow(y,2)) < 100){ return; }
 
 	ix = ix * FOV / iy + window_x / 2;
@@ -176,6 +176,16 @@ void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 	scale = (FOV * 3) / (sqrt(pow(P.x - x, 2) + pow(P.y - y, 2))) * render_scale * scale;
 
 	draw_texture(texture, ix, iy, scale);
+}
+
+void draw_floor(){
+	glBegin(GL_QUADS);
+		glColor3ub(80,80,80);
+		glVertex2i(0, window_y / 2);
+		glVertex2i(0,window_y);
+		glVertex2i(window_x, window_y);
+		glVertex2i(window_x, window_y/2);
+	glEnd();
 }
 
 #endif /*THREED_ENGINE_H_*/

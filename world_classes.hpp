@@ -29,9 +29,6 @@ class Sector{
     int ws, we;
     int z1,z2;
     int d;
-    vector<int> surfx;
-    vector<int> surfy;
-    int surface;
     int textureID;
     float uscale, vscale;
 

@@ -131,8 +131,8 @@ void move_player() {
 		
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
-				P.x -= dx/2;
-				P.y += dy/2;
+				P.x -= dy/2;
+				P.y += dx/2;
 			}
 		}	
 	}
