@@ -30,8 +30,12 @@ void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
 	for (int xi = 0; xi<texture.ht * scale; xi++){
 		for (int yi = 0; yi<texture.vt * scale; yi++){
 			int pixel = static_cast<int>(xi / scale) + static_cast<int>(yi / scale)*texture.vt;
-			glColor3ub(texture.colors[pixel].r,texture.colors[pixel].g ,texture.colors[pixel].b);
-			glVertex2i(xi + x,yi + y);
+			if (texture.colors[pixel].g == 255 && texture.colors[pixel].b == 255){ 
+				;
+			}else{
+				glColor3ub(texture.colors[pixel].r,texture.colors[pixel].g ,texture.colors[pixel].b);
+				glVertex2i(xi + x,yi + y);
+			}
 		}
 	}
 	glEnd();
@@ -77,18 +81,23 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co, Sector se
 			if (pixel < 0) {pixel = 0;}
 			
 			RGB color;
-			color.r = texture.colors[pixel].r - co;
-			if (color.r < 0) {color.r = 0;}
-			if (color.r > 255) {color.r = 255;}
-			color.g = texture.colors[pixel].g - co;
-			if (color.g < 0) {color.g = 0;}
-			if (color.g > 255) {color.g = 255;}
-			color.b = texture.colors[pixel].b - co;
-			if (color.b < 0) {color.b = 0;}
-			if (color.b > 255) {color.b = 255;}
 
- 			glColor3ub(color.r, color.g, color.b);
-			glVertex2i(x,y);
+			if (texture.colors[pixel].g == 255 && texture.colors[pixel].b == 255){
+				;
+			}else{
+				color.r = texture.colors[pixel].r - co;
+				if (color.r < 0) {color.r = 0;}
+				if (color.r > 255) {color.r = 255;}
+				color.g = texture.colors[pixel].g - co;
+				if (color.g < 0) {color.g = 0;}
+				if (color.g > 255) {color.g = 255;}
+				color.b = texture.colors[pixel].b - co;
+				if (color.b < 0) {color.b = 0;}
+				if (color.b > 255) {color.b = 255;}
+			
+				glColor3ub(color.r, color.g, color.b);
+				glVertex2i(x,y);
+			}
 			vi += vstep;
 		}
 		ui += ustep;
@@ -170,7 +179,6 @@ void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 
 	draw_texture(texture, ix, iy, scale);
 	glBegin(GL_POINTS);
-	glColor3ub(255,0,255);
 	glVertex2i(ix,iy);
 	glEnd();
 
