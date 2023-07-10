@@ -7,6 +7,7 @@
 #include <vector>
 #include <fstream>
 #include <math.h>
+#include "world_classes.hpp"
 
 using namespace std;
 
@@ -166,8 +167,8 @@ void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 	ix = x * CS - y * SN;
 	iy = y * CS + x * SN;
 	iz = z - P.z + ((P.l * iy) / 32);
-
-	if (iy < 1) { return; }
+	if (y < 1) { return; }
+	if (sqrt(pow(x,2) + pow(y,2)) < 100){ return; }
 
 	ix = ix * FOV / iy + window_x / 2;
 	iy = iz * FOV / iy + window_y / 2;

@@ -20,6 +20,7 @@ typedef struct {
 	int x, y, z;
 	float a;
 	int l;
+	int cr = 15;
 
 }player; player P;
 
@@ -58,6 +59,8 @@ void create_textures(){
 	texture_list.push_back(Texture("./textures/STARGR2_c.bmp", 128,128));
 	texture_list.push_back(Texture("./textures/STONE2_c.bmp", 128,128));
 	texture_list.push_back(Texture("./textures/BRNBIGC_c.bmp", 128,128));
+	texture_list.push_back(Texture("./textures/monster_c.bmp", 16,16));
+	
 }
 
 #endif

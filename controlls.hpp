@@ -2,6 +2,9 @@
 #define CONTROLLS_H_
 
 #include <GL/glut.h>
+#include <vector>
+#include "world_classes.hpp"
+
 
 extern player P;
 
@@ -45,7 +48,7 @@ void buttons_down(unsigned char key, int x, int y){
 }
 
 
-//can't use this way with second screen
+//can't use this with second screen
 void mouse_func(int x, int y){
 	if (x <= 0){glutWarpPointer(window_x * render_scale, y);}
 	if (x >= window_x * render_scale - 1){glutWarpPointer(0, y);}
@@ -61,13 +64,80 @@ void mouse_func(int x, int y){
 // 	glutSetCursor(GLUT_CURSOR_NONE);
 // }
 
+#include <cmath>
+
+bool isCollision(float x, float y, float radius, float x1, float y1, float x2, float y2) {
+    float dist = abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) /
+                 sqrt(pow(y2 - y1, 2) + pow(x2 - x1, 2));
+
+    if (dist <= radius) {
+        float minX = min(x1, x2);
+        float maxX = max(x1, x2);
+        float minY = min(y1, y2);
+        float maxY = max(y1, y2);
+
+        if (x >= minX - radius && x <= maxX + radius && y >= minY - radius && y <= maxY + radius) {
+            return true;  // Collision detected
+        }
+    }
+
+    return false;  // No collision
+}
+
+
+
 void move_player() {
 	int dx = sin(P.a/180*M_PI) * 10.0;
 	int dy = cos(P.a / 180 * M_PI) * 10.0;
-	if (Keys.w == 1) { P.x += dx; P.y += dy; }
-	if (Keys.s == 1) { P.x -= dx; P.y -= dy; }
-	if (Keys.a == 1) { P.x -= dy/2; P.y += dx/2; }
-	if (Keys.d == 1) { P.x += dy/2; P.y -= dx/2; }
+	if (Keys.w == 1) { 
+		P.x += dx; 
+		P.y += dy; 
+		
+		for (int w = 0; w < W.size(); w++){
+			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
+				P.x -= dx;
+				P.y -= dy;
+			}
+		}
+	}
+
+	if (Keys.s == 1) { 
+		P.x -= dx; 
+		P.y -= dy;
+
+		for (int w = 0; w < W.size(); w++){
+			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
+				P.x += dx;
+				P.y += dy;
+			}
+		}	
+	}
+
+	if (Keys.a == 1) { 
+		P.x -= dy/2; 
+		P.y += dx/2; 
+	
+		for (int w = 0; w < W.size(); w++){
+			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
+				P.x += dy/2;
+				P.y -= dx/2;
+			}
+		}	
+	}
+	
+	if (Keys.d == 1) { 
+		P.x += dy/2; 
+		P.y -= dx/2;
+		
+		for (int w = 0; w < W.size(); w++){
+			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
+				P.x -= dx/2;
+				P.y += dy/2;
+			}
+		}	
+	}
+
+
 	if (Keys.down == 1) { P.l -= 1; }
 	if (Keys.up == 1) { P.l += 1; }
 	if (Keys.lctrl == 1) { P.z += 1; }

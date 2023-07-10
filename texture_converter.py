@@ -1,14 +1,14 @@
 import cv2 as cv
 
-import_path = "./doom_textures/"
+import_path = "./textures/"
 export_path = "./textures/"
 
-file_name = "BRNBIGC"
-file_type = ".png"
+file_name = "monster"
+file_type = ".bmp"
 
 
-x_size = 128
-y_size = 128
+x_size = 16
+y_size = 16
 
 
 img = cv.imread(import_path + file_name + file_type, cv.IMREAD_COLOR)
