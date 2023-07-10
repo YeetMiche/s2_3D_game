@@ -29,9 +29,9 @@ with open(wall_file, "w") as wfile:
                     position = obj.location
                     xpos = position[0] * 100
                     ypos = position[1] * 100
-                    zpos = position[2] * 100
-                    texture_id = obj.name.split(":")[1]
-                    scale = float(obj.name.split(":")[2]) * 0.1
+                    zpos = obj.name.split(":")[1]
+                    texture_id = obj.name.split(":")[2]
+                    scale = float(obj.name.split(":")[3]) * 0.1
                     ofile.write(f"{int(xpos)},{int(ypos)},{int(zpos)},{int(texture_id)},{float(scale)}\n")
                 
             
