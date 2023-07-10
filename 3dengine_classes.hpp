@@ -54,8 +54,10 @@ class Texture{
 vector<Texture> texture_list;
 void create_textures(){
 	texture_list.push_back(Texture("./textures/GRAYBIG_c.bmp", 128,128));
-	texture_list.push_back(Texture("./textures/GRAYBIG_c.bmp", 128,128));
-	texture_list.push_back(Texture("./textures/GRAYBIG_c.bmp", 128,128));
+	texture_list.push_back(Texture("./textures/BROWN1_c.bmp", 128,128));
+	texture_list.push_back(Texture("./textures/STARGR2_c.bmp", 128,128));
+	texture_list.push_back(Texture("./textures/STONE2_c.bmp", 128,128));
+	texture_list.push_back(Texture("./textures/SP_DUDE6_c.bmp", 64,128));
 }
 
 #endif

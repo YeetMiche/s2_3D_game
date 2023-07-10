@@ -32,7 +32,17 @@ void import_sectors(){
 }
 
 void import_objects(){
-    Obj.push_back(Object(-150,100,70,0,0.1));
+    ifstream object_file("objects.txt");
+
+    if (object_file.is_open()){
+        char comma;
+        int x,y,z;
+        int texID;
+        float scale;
+        while (object_file >> x >> comma >> y >> comma >> z >> comma >> texID >> comma >> scale){
+            Obj.push_back(Object(x,y,z,texID,scale));
+        }
+    }
 }
 
 float distance(int x1, int x2, int y1, int y2){
