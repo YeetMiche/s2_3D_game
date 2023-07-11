@@ -52,7 +52,6 @@ class Texture{
 	}
 };
 
-Texture enviroment = Texture("./textures/kloppenheim_04_1k_c.bmp", 1024,512);
 vector<Texture> texture_list;
 void create_textures(){
 	texture_list.push_back(Texture("./textures/GRAYBIG_c.bmp", 128,128));
