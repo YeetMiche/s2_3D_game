@@ -38,6 +38,7 @@ void display(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	move_player();
+	screen_shake();
 
 	calculate_wall_distance();
 
@@ -47,17 +48,21 @@ void display(){
 
 	sort_sectors();
 
+	draw_enviroment();
 	draw_floor();
-
 	for (int s = 0; s < S.size(); s++){
 		for (int w = S[s].ws; w<=S[s].we; w++){
+			
+			draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2, S[s]);
+			
 			for (int o = 0; o < Obj.size(); o++){
+				cout << distance(Obj[o].x, P.x, Obj[o].y, P.y) << "," << W[w].distance << endl;
 				if (distance(Obj[o].x, P.x, Obj[o].y, P.y) < W[w].distance){
 					int id = Obj[o].textureID;
 					draw_texture_3D(texture_list[id], Obj[o].x, Obj[o].y, Obj[o].z, Obj[o].scale);
 				}
 			}
-			draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2, S[s]);
+
 
 		}
 	}
@@ -67,16 +72,14 @@ void display(){
 		;
 	}
 
-	// draw_texture_3D(texture_list[0], -150, 100, 70, 0.1);
-
 	frame += 1;
 	if (clock() - fps_counter_start > 1000){
 		fps = frame;
 		frame = 0;
 		fps_counter_start = clock();
 
-		gameFrame += 1;
 	}
+	gameFrame += 1;
 
 	glutPostRedisplay();
 	glutSwapBuffers();

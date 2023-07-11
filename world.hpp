@@ -60,7 +60,9 @@ void sort_walls(int s){
 	for (int i = 0; i < S[s].we; i++){
 		for (int n = S[s].ws; n < S[s].we - i; n++){
 			if (W[n].distance < W[n+1].distance) {
-				Wall swp = W[n + 1]; W[n + 1] = W[n]; W[n] = swp;
+				Wall swp = W[n + 1]; 
+                W[n + 1] = W[n]; 
+                W[n] = swp;
 			}
 		}
 	}
@@ -79,8 +81,8 @@ int sector_distance(Sector sector){
 
     x -= P.x;
     y -= P.y;
-
-    return sqrt(x*x + y*y);
+    
+    return sqrt(x*x + y*y) - sector.z1;
 }
 
 

@@ -24,6 +24,9 @@ void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 
 void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
 	
+	x = x - texture.ht/2*scale;
+	y = y - texture.vt/2*scale;
+
 	glBegin(GL_POINTS);
 	for (int xi = 0; xi<texture.ht * scale; xi++){
 		for (int yi = 0; yi<texture.vt * scale; yi++){
@@ -180,14 +183,20 @@ void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 	iy = y * CS + x * SN;
 	iz = z - P.z + ((P.l * iy) / 32);
 	if (iy < 1) { return; }
-	if (sqrt(pow(x,2) + pow(y,2)) < 100){ return; }
+	if (sqrt(pow(x,2) + pow(y,2)) < 25){ return; }
 
 	ix = ix * FOV / iy + window_x / 2;
 	iy = iz * FOV / iy + window_y / 2;
 
-	scale = (FOV * 3) / (sqrt(pow(P.x - x, 2) + pow(P.y - y, 2))) * render_scale * scale;
+	scale = FOV / (sqrt(pow(P.x - x, 2) + pow(P.y - y, 2))) * render_scale * scale;
 
 	draw_texture(texture, ix, iy, scale);
+
+	glBegin(GL_POINTS);
+		glColor3ub(255,0,255);
+		glVertex2i(ix,iy);
+	glEnd();
+
 }
 
 void draw_floor(){
