@@ -92,6 +92,8 @@ void move_player() {
 	if (Keys.w == 1) { 
 		P.x += dx; 
 		P.y += dy; 
+
+		P.sa += 1.2;
 		
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
@@ -105,6 +107,8 @@ void move_player() {
 		P.x -= dx; 
 		P.y -= dy;
 
+		P.sa += 1.2;
+
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
 				P.x += dx;
@@ -117,6 +121,8 @@ void move_player() {
 		P.x -= dy/2; 
 		P.y += dx/2; 
 	
+		P.sa += 1.2;
+
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
 				P.x += dy/2;
@@ -129,6 +135,8 @@ void move_player() {
 		P.x += dy/2; 
 		P.y -= dx/2;
 		
+		P.sa += 1.2;
+
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
 				P.x -= dy/2;
@@ -138,12 +146,21 @@ void move_player() {
 	}
 
 
-	if (Keys.down == 1) { P.l -= 1; }
-	if (Keys.up == 1) { P.l += 1; }
-	if (Keys.lctrl == 1) { P.z += 1; }
-	if (Keys.space == 1) { P.z -= 1; }
+	if (Keys.down == 1) { ; } // P.l -= 1
+	if (Keys.up == 1) { ; } // P.l += 1
+	if (Keys.lctrl == 1) { ; } // P.z += 1
+	if (Keys.space == 1) { ; } //P.z -= 1
 	if (Keys.pfov == 1) { FOV += 5; }
 	if (Keys.mfov == 1) { FOV -= 5; }
+}
+
+void screen_shake(){
+	if (P.sa > 30) {P.sa = 30;}
+	if (P.sa < 0) {P.sa = 0;}
+
+	P.l = (float)sin(gameFrame/3) * P.sa /110;
+
+	P.sa -= 1.1;
 }
 
 #endif

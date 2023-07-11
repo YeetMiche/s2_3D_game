@@ -17,11 +17,11 @@ extern const int render_scale;
 extern int scaled_x, scaled_y;
 
 typedef struct {
-	int x, y, z;
-	float a;
-	int l;
-	int cr = 15;
-
+	int x, y, z; //player position
+	float a; //player angle
+	float l; //player look
+	int cr = 15; //player colission radius
+	float sa = 0;  //screen shake amplitude
 }player; player P;
 
 typedef struct {
@@ -52,6 +52,7 @@ class Texture{
 	}
 };
 
+Texture enviroment = Texture("./textures/kloppenheim_04_1k_c.bmp", 1024,512);
 vector<Texture> texture_list;
 void create_textures(){
 	texture_list.push_back(Texture("./textures/GRAYBIG_c.bmp", 128,128));
@@ -60,7 +61,6 @@ void create_textures(){
 	texture_list.push_back(Texture("./textures/STONE2_c.bmp", 128,128));
 	texture_list.push_back(Texture("./textures/BRNBIGC_c.bmp", 128,128));
 	texture_list.push_back(Texture("./textures/monster_c.bmp", 16,16));
-	
 }
 
 #endif

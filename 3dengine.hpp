@@ -39,6 +39,18 @@ void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
 	glEnd();
 }
 
+void draw_texture_no_transparency(Texture texture, int x = 0, int y = 0, float xscale = 1, float yscale = 1){
+	glBegin(GL_POINTS);
+	for (int xi = 0; xi<texture.ht * xscale; xi++){
+		for (int yi = 0; yi<texture.vt * yscale; yi++){
+			int pixel = static_cast<int>(xi / xscale) + static_cast<int>(yi / yscale)*texture.vt;
+			glColor3ub(texture.colors[pixel].r,texture.colors[pixel].g ,texture.colors[pixel].b);
+			glVertex2i(xi + x,yi + y);
+		}
+	}
+	glEnd();
+}
+
 void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co, Sector sector) {
 
 	float dyb = b2 - b1;
@@ -180,11 +192,25 @@ void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 
 void draw_floor(){
 	glBegin(GL_QUADS);
-		glColor3ub(80,80,80);
-		glVertex2i(0, window_y / 2);
-		glVertex2i(0,window_y);
+		glColor3ub(10,20,0);
+		glVertex2i(0, window_y / 2 + P.l);
+		glColor3ub(30,80,10);
+		glVertex2i(0,window_y + P.l);
+		glColor3ub(30,80,10);
+		glVertex2i(window_x, window_y + P.l);
+		glColor3ub(10,20,0);
+		glVertex2i(window_x, window_y/2 + P.l);
+	glEnd();
+}
+
+void draw_enviroment(){
+	glBegin(GL_QUADS);
+		glColor3ub(10,20,50);
+		glVertex2i(0,0);
+		glVertex2i(window_x,0);
+		glColor3ub(120,50,30);
 		glVertex2i(window_x, window_y);
-		glVertex2i(window_x, window_y/2);
+		glVertex2i(0,window_y);
 	glEnd();
 }
 
