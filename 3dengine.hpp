@@ -118,6 +118,79 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co, Sector se
 	glEnd();
 }
 
+void draw_plane(Sector sector) {
+	int wx[4], wy[4], wz[4]; 
+	float CS = cos(P.a / 180 * M_PI), SN = sin(P.a / 180 * M_PI);
+	int swp;
+	int x,y,u,v;
+	int z1 = sector.z1;
+	int z2 = sector.z2;
+
+	vector<int> tsx, tsy;
+	vector<int> bsx, bsy;
+	for (int i = sector.ws; i <= sector.we; i++){
+
+
+		x = W[i].x1;
+		y = W[i].y1;
+		u = W[i].x2;
+		v = W[i].y2;
+
+
+		int x1 = x - P.x, y1 = y - P.y;
+		int x2 = u - P.x, y2 = v - P.y;
+
+
+		wx[0] = x1 * CS - y1 * SN;
+		wx[1] = x2 * CS - y2 * SN;
+		wx[2] = wx[0];
+		wx[3] = wx[1];
+
+		wy[0] = y1 * CS + x1 * SN;
+		wy[1] = y2 * CS + x2 * SN;
+		wy[2] = wy[0];
+		wy[3] = wy[1];
+
+		wz[0] = z1 - P.z + ((P.l * wy[0]) / 32);
+		wz[1] = z1 - P.z + ((P.l * wy[1]) / 32);
+		wz[2] = z2 - P.z + ((P.l * wy[0]) / 32);
+		wz[3] = z2 - P.z + ((P.l * wy[1]) / 32);
+
+		if (wy[0] < 1 && wy[1] < 1) { return; }
+		if (wy[0] < 1) {
+			clip_behind_player(&wx[0], &wy[0], &wz[0], wx[1], wy[1], wz[1]);
+			clip_behind_player(&wx[2], &wy[2], &wz[2], wx[3], wy[3], wz[3]);
+
+		}
+
+		if (wy[1] < 1) {
+			clip_behind_player(&wx[1], &wy[1], &wz[1], wx[0], wy[0], wz[0]);
+			clip_behind_player(&wx[3], &wy[3], &wz[3], wx[2], wy[2], wz[2]);
+
+		}
+
+		tsx.push_back(wx[0] * FOV / wy[0] + window_x / 2); tsy.push_back(wz[0] * FOV / wy[0] + window_y / 2);
+		bsx.push_back(wx[2] * FOV / wy[2] + window_x / 2); bsy.push_back(wz[2] * FOV / wy[2] + window_y / 2);
+	}
+	
+	glBegin(GL_POLYGON);
+	glColor3ub(120,120,120);
+	for (int i = 0; i < tsx.size(); i++){
+		glVertex2i(tsx[i], tsy[i]);
+	}
+	glEnd();
+
+	// glBegin(GL_POLYGON);
+	// glColor3ub(100,100,100);
+	// for (int i = 0; i < bsx.size(); i++){
+	// 	glVertex2i(bsx[i], bsy[i]);
+	// }
+	// glEnd();
+
+}
+
+
+
 void draw_wall(int x, int y, int u, int v, int z1, int z2, Sector sector) {
 	int wx[4], wy[4], wz[4]; 
 	float CS = cos(P.a / 180 * M_PI), SN = sin(P.a / 180 * M_PI);
@@ -168,6 +241,8 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2, Sector sector) {
 		int color_offset = atan2((u - x), (v - y + 0.00001)) * 7;
 
 		fill_wall(sx[0], sx[1], sy[0], sy[1], sy[2], sy[3], color_offset, sector);
+
+		
 	}
 }
 
@@ -199,7 +274,7 @@ void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 
 }
 
-void draw_floor(){
+void draw_world_floor(){
 	glBegin(GL_QUADS);
 		glColor3ub(10,20,0);
 		glVertex2i(0, window_y / 2 + P.l);

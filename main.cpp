@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <GL/freeglut.h>
 
 using namespace std;
 
@@ -42,21 +43,24 @@ void display(){
 
 	calculate_wall_distance();
 
-	for (int s = 0; s< S.size(); s++){
-		sort_walls(s);
+	for (int s = 0; s < S.size(); s++){
+		if (S[s].isFloor == false){
+			sort_walls(s);
+		}
 	}
 
 	sort_sectors();
 
 	draw_enviroment();
-	draw_floor();
+	draw_world_floor();
 	for (int s = 0; s < S.size(); s++){
 		for (int w = S[s].ws; w<=S[s].we; w++){
-			
-			draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2, S[s]);
-			
+			if (S[s].isFloor == false){
+				draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2, S[s]);
+			} else {
+				draw_plane(S[s]);
+			}
 			for (int o = 0; o < Obj.size(); o++){
-				cout << distance(Obj[o].x, P.x, Obj[o].y, P.y) << "," << W[w].distance << endl;
 				if (distance(Obj[o].x, P.x, Obj[o].y, P.y) < W[w].distance){
 					int id = Obj[o].textureID;
 					draw_texture_3D(texture_list[id], Obj[o].x, Obj[o].y, Obj[o].z, Obj[o].scale);
@@ -66,6 +70,10 @@ void display(){
 
 		}
 	}
+
+	string text = "Hello World!"; 
+
+	
 	
 
 	while ((fps_limit_start + 1000/FPS_LIMIT) - clock() > 0){
@@ -110,6 +118,7 @@ int main(int argc, char* argv[]){
     glutKeyboardUpFunc(buttons_up);
 	glutKeyboardFunc(buttons_down);
 	glutPassiveMotionFunc(mouse_func);
+	glutSpecialFunc(specialKeys);
 	init();
     
     glutMainLoop();

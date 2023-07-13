@@ -94,13 +94,13 @@ void move_player() {
 		P.y += dy; 
 
 		P.sa += 1.2;
-		
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
 				P.x -= dx;
 				P.y -= dy;
 			}
 		}
+		
 	}
 
 	if (Keys.s == 1) { 
@@ -108,13 +108,13 @@ void move_player() {
 		P.y -= dy;
 
 		P.sa += 1.2;
-
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
-				P.x += dx;
-				P.y += dy;
+				P.x -= dx;
+				P.y -= dy;
 			}
-		}	
+		}
+	
 	}
 
 	if (Keys.a == 1) { 
@@ -123,12 +123,13 @@ void move_player() {
 	
 		P.sa += 1.2;
 
+
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
-				P.x += dy/2;
-				P.y -= dx/2;
+				P.x -= dx;
+				P.y -= dy;
 			}
-		}	
+		}
 	}
 	
 	if (Keys.d == 1) { 
@@ -137,12 +138,13 @@ void move_player() {
 		
 		P.sa += 1.2;
 
+
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
-				P.x -= dy/2;
-				P.y += dx/2;
+				P.x -= dx;
+				P.y -= dy;
 			}
-		}	
+		}
 	}
 
 
@@ -161,6 +163,23 @@ void screen_shake(){
 	P.l = (float)sin(gameFrame/3) * P.sa /110;
 
 	P.sa -= 1.1;
+}
+
+void specialKeys(int key, int x, int y) {
+    switch (key) {
+        case GLUT_KEY_UP:
+            std::cout << "Up arrow key pressed" << std::endl;
+            break;
+        case GLUT_KEY_DOWN:
+            std::cout << "Down arrow key pressed" << std::endl;
+            break;
+        case GLUT_KEY_LEFT:
+            std::cout << "Left arrow key pressed" << std::endl;
+            break;
+        case GLUT_KEY_RIGHT:
+            std::cout << "Right arrow key pressed" << std::endl;
+            break;
+    }
 }
 
 #endif

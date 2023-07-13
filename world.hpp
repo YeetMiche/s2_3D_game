@@ -25,8 +25,9 @@ void import_sectors(){
         char comma;
         int ws,we,z1,z2;
         int texID;
-        while (sector_file >> ws >> comma >> we >> comma >> z1 >> comma >> z2 >> comma >> texID){
-            S.push_back(Sector(ws,we,z1,z2, texID));
+        int isFloor;
+        while (sector_file >> ws >> comma >> we >> comma >> z1 >> comma >> z2 >> comma >> texID >> comma >> isFloor){
+            S.push_back(Sector(ws,we,z1,z2,isFloor,texID));
         } 
     }
 }
