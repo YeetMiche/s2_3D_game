@@ -17,12 +17,13 @@ with open(wall_file, "w") as wfile:
                     z1 = int(obj.name.split(":")[1])
                     z2 = int(obj.name.split(":")[2])
                     tid = int(obj.name.split(":")[3])
+                    isFloor = int(obj.name.split(":")[4])
                     for e in edges:
                         start = obj.data.vertices[e.vertices[0]].co * 100
                         end = obj.data.vertices[e.vertices[1]].co * 100
                         wfile.write(f"{int(start[0])},{int(start[1])},{int(end[0])},{int(end[1])}\n")
                         wall_end += 1
-                    sfile.write(f"{int(wall_start)},{int(wall_end)},{int(z1)},{int(z2)},{int(tid)}\n")
+                    sfile.write(f"{int(wall_start)},{int(wall_end)},{int(z1)},{int(z2)},{int(tid)},{int(isFloor)}\n")
                     wall_start = wall_end + 1
                 
                 if obj.name.split(":")[0] == "obj":
