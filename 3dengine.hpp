@@ -267,10 +267,10 @@ void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 
 	draw_texture(texture, ix, iy, scale);
 
-	glBegin(GL_POINTS);
-		glColor3ub(255,0,255);
-		glVertex2i(ix,iy);
-	glEnd();
+	// glBegin(GL_POINTS);
+	// 	glColor3ub(255,0,255);
+	// 	glVertex2i(ix,iy);
+	// glEnd();
 
 }
 

@@ -32,6 +32,8 @@ int FOV = 200;
 #include "3dengine.hpp"
 #include "controlls.hpp"
 #include "world.hpp"
+#include "2dengine.hpp"
+#include "game_logic.hpp"
 
 void display(){
 	fps_limit_start = clock();
@@ -71,10 +73,9 @@ void display(){
 		}
 	}
 
-	string text = "Hello World!"; 
 
-	
-	
+	game.display_coins();
+	game.spawn_monster();
 
 	while ((fps_limit_start + 1000/FPS_LIMIT) - clock() > 0){
 		;
