@@ -8,6 +8,7 @@
 #include <fstream>
 #include <math.h>
 #include "world_classes.hpp"
+#include "world.hpp"
 
 using namespace std;
 
@@ -31,7 +32,7 @@ void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
 	for (int xi = 0; xi<texture.ht * scale; xi++){
 		for (int yi = 0; yi<texture.vt * scale; yi++){
 			int pixel = static_cast<int>(xi / scale) + static_cast<int>(yi / scale)*texture.vt;
-			if (texture.colors[pixel].g == 255 && texture.colors[pixel].b == 255){ 
+			if (texture.colors[pixel].g == 255 && texture.colors[pixel].b == 255 && texture.colors[pixel].r == 0){ 
 				;
 			} else {
 				glColor3ub(texture.colors[pixel].r,texture.colors[pixel].g ,texture.colors[pixel].b);
@@ -249,6 +250,8 @@ void draw_wall(int x, int y, int u, int v, int z1, int z2, Sector sector) {
 void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 	int ix, iy, iz;
 	float CS = cos(P.a / 180 * M_PI), SN = sin(P.a / 180 * M_PI);
+	
+	scale = FOV * render_scale * scale / distance(x,P.x,y,P.y);
     
     x = x - P.x;
 	y = y - P.y;
@@ -262,8 +265,6 @@ void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 
 	ix = ix * FOV / iy + window_x / 2;
 	iy = iz * FOV / iy + window_y / 2;
-
-	scale = FOV / (sqrt(pow(P.x - x, 2) + pow(P.y - y, 2))) * render_scale * scale;
 
 	draw_texture(texture, ix, iy, scale);
 
@@ -279,9 +280,9 @@ void draw_world_floor(){
 		glColor3ub(10,20,0);
 		glVertex2i(0, window_y / 2 + P.l);
 		glColor3ub(30,80,10);
-		glVertex2i(0,window_y + P.l);
+		glVertex2i(0,window_y);
 		glColor3ub(30,80,10);
-		glVertex2i(window_x, window_y + P.l);
+		glVertex2i(window_x, window_y);
 		glColor3ub(10,20,0);
 		glVertex2i(window_x, window_y/2 + P.l);
 	glEnd();

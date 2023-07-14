@@ -64,7 +64,13 @@ void mouse_func(int x, int y){
 // 	glutSetCursor(GLUT_CURSOR_NONE);
 // }
 
-#include <cmath>
+void click_mouse_func(int button, int state, int x, int y){
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN){
+		P.shooting = true;
+	} else {
+		P.shooting = false;
+	}
+}
 
 bool isCollision(float x, float y, float radius, float x1, float y1, float x2, float y2) {
     float dist = abs((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1) /
@@ -93,7 +99,7 @@ void move_player() {
 		P.x += dx; 
 		P.y += dy; 
 
-		P.sa += 1.2;
+		P.sa += 1.3;
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
 				P.x -= dx;
@@ -107,7 +113,7 @@ void move_player() {
 		P.x -= dx; 
 		P.y -= dy;
 
-		P.sa += 1.2;
+		P.sa += 1.3;
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
 				P.x -= dx;
@@ -121,7 +127,7 @@ void move_player() {
 		P.x -= dy/2; 
 		P.y += dx/2; 
 	
-		P.sa += 1.2;
+		P.sa += 1.3;
 
 
 		for (int w = 0; w < W.size(); w++){
@@ -136,7 +142,7 @@ void move_player() {
 		P.x += dy/2; 
 		P.y -= dx/2;
 		
-		P.sa += 1.2;
+		P.sa += 1.3;
 
 
 		for (int w = 0; w < W.size(); w++){
@@ -166,7 +172,7 @@ void screen_shake(){
 }
 
 void specialKeys(int key, int x, int y) {
-    switch (key) {
+    switch (key){
         case GLUT_KEY_UP:
             std::cout << "Up arrow key pressed" << std::endl;
             break;

@@ -8,26 +8,27 @@
 
 class Monster{
     private:
+    int distance = 4000;
     void generate_random_position(){
         switch(rand()%4){
         case 0:
-            x = -4000 + rand()%500 - rand()%500;
-            y = -4000 + rand()%500 - rand()%500;
+            x = -distance - rand()%1000;
+            y = -distance - rand()%1000;
             break;
         
         case 1:
-            x = 4000 + rand()%500 - rand()%500;
-            y = -4000 + rand()%500 - rand()%500;
+            x = distance + rand()%1000;
+            y = -distance - rand()%1000;
             break;
 
         case 2:
-            x = -4000 + rand()%500 - rand()%500;
-            y = 4000 + rand()%500 - rand()%500;
+            x = -distance - rand()%1000;
+            y = distance + rand()%1000;
             break;
 
         case 3:
-            x = 4000 + rand()%500 - rand()%500;
-            y = 4000 + rand()%500 - rand()%500;
+            x = distance + rand()%1000;
+            y = distance + rand()%1000;
             break;
         }
     }
@@ -37,6 +38,7 @@ class Monster{
     int health = 100;
     int x,y;
     int texID = 5;
+    int objID;
 
     Monster(bool isStrong = false){
         if (isStrong == true){
@@ -45,10 +47,9 @@ class Monster{
         }
 
         generate_random_position();
-    }
 
-    void draw(){
-        draw_texture_3D(texture_list[texID], x,y,50,2);
+        Obj.push_back(Object(x,y,50,texID,2));
+        objID = Obj.size();
     }
 };
 
@@ -68,18 +69,15 @@ class Game{
     }
 
     void spawn_monster(){
-        monster_list.push_back(Monster());
-
+        
+        if (monster_list.size() <= 20 && rand()%100 == 1){
+            monster_list.push_back(Monster());
+        }
         for (int i = 0; i < monster_list.size(); i++){
             if (monster_list[i].isDead) {
+                Obj.erase(Obj.begin() + monster_list[i].objID);
                 monster_list.erase(monster_list.begin() + i);
             }
-        }
-    }
-
-    void draw_monster(){
-        for (int i = 0; i < monster_list.size(); i++){
-            monster_list[i].draw();
         }
     }
 };

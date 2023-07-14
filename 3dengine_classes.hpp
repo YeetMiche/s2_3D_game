@@ -22,6 +22,7 @@ typedef struct {
 	float l; //player look
 	int cr = 15; //player colission radius
 	float sa = 0;  //screen shake amplitude
+	bool shooting = false;
 }player; player P;
 
 typedef struct {
@@ -61,6 +62,9 @@ void create_textures(){
 	texture_list.push_back(Texture("./textures/BRNBIGC_c.bmp", 128,128)); 		//ID 4
 	texture_list.push_back(Texture("./textures/monster_c.bmp", 16,16)); 		//ID 5
 	texture_list.push_back(Texture("./textures/monster_hard_c.bmp", 16,16));	//ID 6
+	texture_list.push_back(Texture("./textures/weapon_c.bmp", 200,200));		//ID 7
+	texture_list.push_back(Texture("./textures/weapon_shoot1_c.bmp", 200,200));	//ID 8
+	texture_list.push_back(Texture("./textures/weapon_shoot2_c.bmp", 200,200));	//ID 9
 }
 
 #endif
