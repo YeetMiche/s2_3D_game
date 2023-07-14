@@ -53,11 +53,13 @@ class Object{
     float scale;
     int textureID;
     bool isEnemy = false;
+    int entID;
 
-    Object(int _x, int _y, int _z, int _textureID = 0, float _scale = 1){
+    Object(int _x, int _y, int _z, int _textureID = 0, float _scale = 1, int _entID = -1){
         x = _x, y = _y, z = _z;
         textureID = _textureID;
         scale = _scale;
+        entID = _entID;
     }
 };
 

@@ -4,6 +4,8 @@
 #include <vector>
 #include <math.h>
 #include <fstream>
+#include "game_math.hpp"
+#include "game_logic.hpp"
 using namespace std;
 
 void import_walls(){
@@ -44,11 +46,6 @@ void import_objects(){
             Obj.push_back(Object(x,y,z,texID,scale));
         }
     }
-}
-
-float distance(int x1, int x2, int y1, int y2){
-	float d = sqrt(pow(x2 - x1, 2) + pow(y2-y1, 2));
-	return d;
 }
 
 void calculate_wall_distance(){
@@ -95,6 +92,18 @@ void sort_sectors(){
                 Sector swp = S[n+1];
                 S[n+1] = S[n];
                 S[n] = swp;
+            }
+        }
+    }
+}
+
+void sort_objects(){
+    for (int i = 0; i < Obj.size(); i++){
+        for (int n = 0; n < Obj.size() - i - 1; n++){
+            if (distance(Obj[n].x, P.x, Obj[n].y, P.y) < distance(Obj[n+1].x, P.x, Obj[n+1].y, P.y)){
+                Object swp = Obj[n+1];
+                Obj[n+1] = Obj[n];
+                Obj[n] = swp;
             }
         }
     }

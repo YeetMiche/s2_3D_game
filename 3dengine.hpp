@@ -9,6 +9,7 @@
 #include <math.h>
 #include "world_classes.hpp"
 #include "world.hpp"
+#include "2dengine.hpp"
 
 using namespace std;
 
@@ -21,38 +22,6 @@ void clip_behind_player(int *x1, int *y1, int *z1, int x2, int y2, int z2) {
 	*x1 = *x1 + s * (x2 - (*x1));
 	*y1 = *y1 + s * (y2 - (*y1)); if (*y1 == 0) { *y1 = 1; }
 	*z1 = *z1 + s * (z2 - (*z1));
-}
-
-void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
-	
-	x = x - texture.ht/2*scale;
-	y = y - texture.vt/2*scale;
-
-	glBegin(GL_POINTS);
-	for (int xi = 0; xi<texture.ht * scale; xi++){
-		for (int yi = 0; yi<texture.vt * scale; yi++){
-			int pixel = static_cast<int>(xi / scale) + static_cast<int>(yi / scale)*texture.vt;
-			if (texture.colors[pixel].g == 255 && texture.colors[pixel].b == 255 && texture.colors[pixel].r == 0){ 
-				;
-			} else {
-				glColor3ub(texture.colors[pixel].r,texture.colors[pixel].g ,texture.colors[pixel].b);
-				glVertex2i(xi + x,yi + y);
-			}
-		}
-	}
-	glEnd();
-}
-
-void draw_texture_no_transparency(Texture texture, int x = 0, int y = 0, float xscale = 1, float yscale = 1){
-	glBegin(GL_POINTS);
-	for (int xi = 0; xi<texture.ht * xscale; xi++){
-		for (int yi = 0; yi<texture.vt * yscale; yi++){
-			int pixel = static_cast<int>(xi / xscale) + static_cast<int>(yi / yscale)*texture.vt;
-			glColor3ub(texture.colors[pixel].r,texture.colors[pixel].g ,texture.colors[pixel].b);
-			glVertex2i(xi + x,yi + y);
-		}
-	}
-	glEnd();
 }
 
 void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co, Sector sector) {
