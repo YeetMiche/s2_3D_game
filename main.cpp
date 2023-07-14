@@ -52,6 +52,7 @@ void display(){
 	}
 
 	sort_sectors();
+	sort_objects();
 
 	draw_enviroment();
 	draw_world_floor();
@@ -74,8 +75,10 @@ void display(){
 	}
 
 
-	game.display_coins();
-	game.spawn_monster();
+	game.update();
+
+	draw_weapon();
+	draw_crosshair(window_x/2, window_y/2, 2);
 
 	while ((fps_limit_start + 1000/FPS_LIMIT) - clock() > 0){
 		;
@@ -119,6 +122,8 @@ int main(int argc, char* argv[]){
     glutKeyboardUpFunc(buttons_up);
 	glutKeyboardFunc(buttons_down);
 	glutPassiveMotionFunc(mouse_func);
+	glutMotionFunc(mouse_func);
+	glutMouseFunc(click_mouse_func);
 	glutSpecialFunc(specialKeys);
 	init();
     
