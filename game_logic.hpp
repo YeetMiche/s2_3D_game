@@ -15,23 +15,23 @@ class Monster{
     void generate_random_position(){
         switch(rand()%4){
         case 0:
-            x = -spawn_distance - rand()%1000;
-            y = -spawn_distance - rand()%1000;
+            x = -spawn_distance + rand()%2000;
+            y = -spawn_distance + rand()%2000;
             break;
         
         case 1:
-            x = spawn_distance + rand()%1000;
-            y = -spawn_distance - rand()%1000;
+            x = spawn_distance - rand()%2000;
+            y = -spawn_distance + rand()%2000;
             break;
 
         case 2:
-            x = -spawn_distance - rand()%1000;
-            y = spawn_distance + rand()%1000;
+            x = -spawn_distance + rand()%2000;
+            y = spawn_distance - rand()%2000;
             break;
 
         case 3:
-            x = spawn_distance + rand()%1000;
-            y = spawn_distance + rand()%1000;
+            x = spawn_distance - rand()%2000;
+            y = spawn_distance - rand()%2000;
             break;
         }
     }
@@ -49,22 +49,20 @@ class Monster{
             texID = 6;
         }
 
-        x = 1000, y = 1000;
 
-        // generate_random_position();
-        // entID = rand()%100000;
+
+        generate_random_position();
+        entID = rand()%100000;
         Obj.push_back(Object(x,y,50,texID,2, entID));
 
     }
 
     void check_shot(){
         if (P.shooting){
-            int da = abs(calculate_angle(P.y,P.x,x,y) + 180 - P.a) - 180;
+            int da = abs(calculate_angle(-P.x,P.y,-x,y) + 90 - P.a) - 180;
             int range;
             range = 2000 / distance(P.x, x, P.y, y);
-
-            cout << range << endl;
-
+            
             if (da >= -range && da <= range){
                 health -= 10;
             }
@@ -106,7 +104,7 @@ class Game{
 
     void spawn_monster(){
         
-        if (monster_list.size() <= max_monster && rand()%100 == 1){
+        if (monster_list.size() < max_monster && rand()%100 == 1){
             monster_list.push_back(Monster());
         }
         for (int i = 0; i < monster_list.size(); i++){
