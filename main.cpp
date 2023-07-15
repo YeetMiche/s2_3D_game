@@ -107,6 +107,7 @@ void init() {
 	import_sectors();
 	import_objects();
 	create_textures();
+	create_colors();
 }
 
 int main(int argc, char* argv[]){
