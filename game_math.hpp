@@ -20,4 +20,15 @@ float distance(int x1, int x2, int y1, int y2){
 	return d;
 }
 
+bool inRange(int i, int from, int to){
+    if (i >= from && i <= to){
+        return true;
+    } else {return false;}
+}
+
+int randPosNeg(int lim){
+    if (rand()%2 == 0){return rand()%lim;} 
+    else {return -rand()%lim;}
+}
+
 #endif /*GAME_MATH_H_*/

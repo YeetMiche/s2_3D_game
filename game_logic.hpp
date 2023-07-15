@@ -6,8 +6,11 @@
 #include "2dengine.hpp"
 #include "3dengine_classes.hpp"
 #include "game_math.hpp"
+#include "controlls.hpp"
 
-int max_monster = 1;
+extern int gameFrame;
+
+int max_monster = 20;
 
 class Monster{
     private:
@@ -36,6 +39,8 @@ class Monster{
         }
     }
     
+    int moveToX, moveToY;
+    
     public:
     bool isDead = false;
     int health = 100;
@@ -52,7 +57,8 @@ class Monster{
 
 
         generate_random_position();
-        entID = rand()%100000;
+        findValidPosition();
+        entID = rand();
         Obj.push_back(Object(x,y,50,texID,2, entID));
 
     }
@@ -62,7 +68,7 @@ class Monster{
             int da = abs(calculate_angle(-P.x,P.y,-x,y) + 90 - P.a) - 180;
             int range;
             range = 2000 / distance(P.x, x, P.y, y);
-            
+
             if (da >= -range && da <= range){
                 health -= 10;
             }
@@ -73,8 +79,42 @@ class Monster{
         }
     }
 
+    void findValidPosition(){
+        bool collides = true;
+        while (collides){
+            moveToX = x + randPosNeg(700);
+            moveToY = y + randPosNeg(700);
+            collides = false;
+            for (int w = 0; w < W.size(); w++){
+                if (isCollision(x,y,100,W[w].x1,W[w].y1,W[w].x2,W[w].y2)) {collides = true;}
+            }
+        }
+    }
+
+    void moveRandom(){
+        if (inRange(x, moveToX-10, moveToX+10) && inRange(y, moveToY-10, moveToY+10)){
+            if (rand()%500 == 0){
+                findValidPosition();
+            }
+        } else {
+            float da = calculate_angle(x,y,moveToX,moveToY) + 90;
+            float dx = sin(da/180*M_PI) * 5.0;
+            float dy = cos(da/180*M_PI) * 5.0;
+
+            x += dx, y -= dy;
+        }
+
+        
+
+        int find = entID;
+        for (int f = 0; f < Obj.size(); f++){
+            if (Obj[f].entID == find){Obj[f].x = x; Obj[f].y = y;}
+        }
+    }
+
     void update(){
         check_shot();
+        moveRandom();
     }
 };
 
