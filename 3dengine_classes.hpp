@@ -68,4 +68,25 @@ void create_textures(){
 	texture_list.push_back(Texture("./textures/barrier_tape_c.bmp", 128,128));	//ID 10
 }
 
+vector<RGB> color_list;
+void create_colors(){
+	color_list.push_back({30,10,0});		//ID 0 BROWN
+	color_list.push_back({255,0,255});		//ID 1 PURPLE
+	color_list.push_back({255,0,255});		//ID 2 PURPLE
+	color_list.push_back({255,0,255});		//ID 3 PURPLE
+	color_list.push_back({255,0,255});		//ID 4 PURPLE
+	color_list.push_back({255,0,255});		//ID 5 PURPLE
+	color_list.push_back({255,0,255});		//ID 6 PURPLE
+	color_list.push_back({255,0,255});		//ID 7 PURPLE
+	color_list.push_back({255,0,255});		//ID 8 PURPLE
+	color_list.push_back({255,0,255});		//ID 9 PURPLE
+	color_list.push_back({255,0,255});		//ID 10 PURPLE
+	color_list.push_back({255,0,255});		//ID 11 PURPLE
+	color_list.push_back({255,0,255});		//ID 12 PURPLE
+	color_list.push_back({255,0,255});		//ID 13 PURPLE
+	color_list.push_back({255,0,255});		//ID 14 PURPLE
+	color_list.push_back({255,0,255});		//ID 15 PURPLE
+	color_list.push_back({255,0,255});		//ID 16 PURPLE
+}
+
 #endif
