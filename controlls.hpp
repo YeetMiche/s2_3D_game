@@ -117,8 +117,8 @@ void move_player() {
 		P.sa += shakeChange;
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
-				P.x -= dx;
-				P.y -= dy;
+				P.x += dx;
+				P.y += dy;
 			}
 		}
 	
@@ -133,8 +133,8 @@ void move_player() {
 
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
-				P.x -= dx;
-				P.y -= dy;
+				P.x += dy/2;
+				P.y -= dx/2;
 			}
 		}
 	}
@@ -148,8 +148,8 @@ void move_player() {
 
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
-				P.x -= dx;
-				P.y -= dy;
+				P.x -= dy/2;
+				P.y += dx/2;
 			}
 		}
 	}
@@ -164,12 +164,12 @@ void move_player() {
 }
 
 void screen_shake(){
+	P.sa -= 1.1;
 	if (P.sa > 40) {P.sa = 40;}
 	if (P.sa < 0) {P.sa = 0;}
 
 	P.l = (float)sin(gameFrame/3) * P.sa /110;
 
-	P.sa -= 1.1;
 }
 
 void specialKeys(int key, int x, int y) {

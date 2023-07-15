@@ -142,12 +142,16 @@ void draw_plane(Sector sector) {
 		tsx.push_back(wx[0] * FOV / wy[0] + window_x / 2); tsy.push_back(wz[0] * FOV / wy[0] + window_y / 2);
 		bsx.push_back(wx[2] * FOV / wy[2] + window_x / 2); bsy.push_back(wz[2] * FOV / wy[2] + window_y / 2);
 	}
-	
+
+	int r = color_list[sector.textureID].r;
+	int g = color_list[sector.textureID].g;
+	int b = color_list[sector.textureID].b;
+
 	glBegin(GL_POLYGON);
-	glColor3ub(120,120,120);
-	for (int i = 0; i < tsx.size(); i++){
-		glVertex2i(tsx[i], tsy[i]);
-	}
+		glColor3ub(r,g,b);
+		for (int i = 0; i < tsx.size(); i++){
+			glVertex2i(tsx[i], tsy[i]);
+		}
 	glEnd();
 
 	// glBegin(GL_POLYGON);

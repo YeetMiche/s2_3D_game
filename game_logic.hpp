@@ -14,27 +14,27 @@ int max_monster = 20;
 
 class Monster{
     private:
-    int spawn_distance = 4000;
+    int spawn_distance = 3000;
     void generate_random_position(){
         switch(rand()%4){
         case 0:
-            x = -spawn_distance + rand()%2000;
-            y = -spawn_distance + rand()%2000;
+            x = -spawn_distance + rand()%(spawn_distance/2);
+            y = -spawn_distance + rand()%(spawn_distance/2);
             break;
         
         case 1:
-            x = spawn_distance - rand()%2000;
-            y = -spawn_distance + rand()%2000;
+            x = spawn_distance - rand()%(spawn_distance/2);
+            y = -spawn_distance + rand()%(spawn_distance/2);
             break;
 
         case 2:
-            x = -spawn_distance + rand()%2000;
-            y = spawn_distance - rand()%2000;
+            x = -spawn_distance + rand()%(spawn_distance/2);
+            y = spawn_distance - rand()%(spawn_distance/2);
             break;
 
         case 3:
-            x = spawn_distance - rand()%2000;
-            y = spawn_distance - rand()%2000;
+            x = spawn_distance - rand()%(spawn_distance/2);
+            y = spawn_distance - rand()%(spawn_distance/2);
             break;
         }
     }
@@ -81,6 +81,7 @@ class Monster{
 
     void findValidPosition(){
         bool collides = true;
+        int force_quit = 0;
         while (collides){
             moveToX = x + randPosNeg(700);
             moveToY = y + randPosNeg(700);
@@ -88,6 +89,8 @@ class Monster{
             for (int w = 0; w < W.size(); w++){
                 if (isCollision(x,y,100,W[w].x1,W[w].y1,W[w].x2,W[w].y2)) {collides = true;}
             }
+            force_quit += 1; 
+            if (force_quit > 500) {break;}
         }
     }
 

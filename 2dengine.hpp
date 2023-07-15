@@ -71,7 +71,7 @@ void draw_crosshair(int x, int y, int size) {
 void draw_weapon(){
 	int x = window_x / 4 * 3 - sin(gameFrame / 4) * P.sa / 30;
 	int y = window_y - 80 - cos(gameFrame / 3) * P.sa / 10;
-	
+
 	if (P.shooting){
 		if (gameFrame%10 - 5 < 0){
 			draw_texture(texture_list[8], x, y, 1);

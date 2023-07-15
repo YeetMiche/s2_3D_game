@@ -83,8 +83,6 @@ int sector_distance(Sector sector){
     return sqrt(x*x + y*y) - sector.z1;
 }
 
-
-
 void sort_sectors(){
     for (int i = 0; i < S.size(); i++){
         for (int n = 0; n < S.size() - i - 1; n++){
