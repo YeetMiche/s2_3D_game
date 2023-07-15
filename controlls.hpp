@@ -93,13 +93,14 @@ bool isCollision(float x, float y, float radius, float x1, float y1, float x2, f
 
 
 void move_player() {
+	int shakeChange = 2;
 	int dx = sin(P.a/180*M_PI) * 10.0;
 	int dy = cos(P.a / 180 * M_PI) * 10.0;
 	if (Keys.w == 1) { 
 		P.x += dx; 
 		P.y += dy; 
 
-		P.sa += 1.3;
+		P.sa += shakeChange;
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
 				P.x -= dx;
@@ -113,7 +114,7 @@ void move_player() {
 		P.x -= dx; 
 		P.y -= dy;
 
-		P.sa += 1.3;
+		P.sa += shakeChange;
 		for (int w = 0; w < W.size(); w++){
 			if (isCollision(P.x,P.y,P.cr, W[w].x1, W[w].y1, W[w].x2, W[w].y2)) {
 				P.x -= dx;
@@ -127,7 +128,7 @@ void move_player() {
 		P.x -= dy/2; 
 		P.y += dx/2; 
 	
-		P.sa += 1.3;
+		P.sa += shakeChange;
 
 
 		for (int w = 0; w < W.size(); w++){
@@ -142,7 +143,7 @@ void move_player() {
 		P.x += dy/2; 
 		P.y -= dx/2;
 		
-		P.sa += 1.3;
+		P.sa += shakeChange;
 
 
 		for (int w = 0; w < W.size(); w++){
@@ -163,7 +164,7 @@ void move_player() {
 }
 
 void screen_shake(){
-	if (P.sa > 30) {P.sa = 30;}
+	if (P.sa > 40) {P.sa = 40;}
 	if (P.sa < 0) {P.sa = 0;}
 
 	P.l = (float)sin(gameFrame/3) * P.sa /110;
