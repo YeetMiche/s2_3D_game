@@ -15,7 +15,7 @@ void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
 	
 	x = x - texture.ht/2*scale;
 	y = y - texture.vt/2*scale;
-
+	glPixelZoom(2,2);
 	glBegin(GL_POINTS);
 	for (int xi = 0; xi<texture.ht * scale; xi++){
 		for (int yi = 0; yi<texture.vt * scale; yi++){
@@ -43,12 +43,21 @@ void draw_texture_no_transparency(Texture texture, int x = 0, int y = 0, float x
 	glEnd();
 }
 
+// void draw_text(int x, int y, string text, int r, int g, int b){
+// 	glColor3ub(r,g,b);
+// 	glRasterPos2i(x,y);
+// 	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, reinterpret_cast<const unsigned char*>(text.c_str()));
+// }
 
-
-void draw_text(int x, int y, string text, int r, int g, int b){
+void draw_text(int x, int y, string text, int r, int g, int b, float scale = 1){
+	scale /= 50;
 	glColor3ub(r,g,b);
-	glRasterPos2i(x,y);
-	glutBitmapString(GLUT_BITMAP_HELVETICA_18, reinterpret_cast<const unsigned char*>(text.c_str()));
+	glPushMatrix();
+	glTranslatef(x,y,0);
+	glRotatef(180,180,0,0);
+	glScalef(scale,scale,1);
+	glutStrokeString(GLUT_STROKE_MONO_ROMAN, reinterpret_cast<const unsigned char*>(text.c_str()));
+	glPopMatrix();
 }
 
 void draw_crosshair(int x, int y, int size) {

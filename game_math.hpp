@@ -31,4 +31,21 @@ int randPosNeg(int lim){
     else {return -rand()%lim;}
 }
 
+int get_text_sizex(string text, float scale){
+    int length = 0;
+
+    scale /= 50;
+
+    for (char character : text){
+        length += glutStrokeWidth(GLUT_STROKE_MONO_ROMAN, character) * scale;
+    }
+
+    return length;
+}
+
+int get_text_sizey(float scale){
+    return glutStrokeHeight(GLUT_STROKE_MONO_ROMAN) * (scale/50);
+}
+
+
 #endif /*GAME_MATH_H_*/

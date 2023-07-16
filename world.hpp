@@ -5,7 +5,6 @@
 #include <math.h>
 #include <fstream>
 #include "game_math.hpp"
-#include "game_logic.hpp"
 using namespace std;
 
 void import_walls(){

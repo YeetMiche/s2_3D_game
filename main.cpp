@@ -45,6 +45,7 @@ void display(){
 
 	calculate_wall_distance();
 
+
 	for (int s = 0; s < S.size(); s++){
 		if (S[s].isFloor == false){
 			sort_walls(s);
@@ -61,7 +62,7 @@ void display(){
 			if (S[s].isFloor == false){
 				draw_wall(W[w].x1, W[w].y1, W[w].x2, W[w].y2, S[s].z1, S[s].z2, S[s]);
 			} else {
-				draw_plane(S[s]);
+				draw_plane(S[s],true);
 			}
 			for (int o = 0; o < Obj.size(); o++){
 				if (distance(Obj[o].x, P.x, Obj[o].y, P.y) < W[w].distance){
@@ -75,10 +76,10 @@ void display(){
 	}
 
 
-	game.update();
-
 	draw_weapon();
 	draw_crosshair(window_x/2, window_y/2, 2);
+	
+	game.update();
 
 	while ((fps_limit_start + 1000/FPS_LIMIT) - clock() > 0){
 		;
@@ -95,9 +96,15 @@ void display(){
 
 	glutPostRedisplay();
 	glutSwapBuffers();
+
+	Keys.au = 0;
+	Keys.ad = 0;
+	Keys.al = 0;
+	Keys.ar = 0;
 }	
 
 void init() {
+	cout << "loading..." << clock() << endl;
 	glClearColor(0.12,0.12,0.12,0);
 	gluOrtho2D(0,window_x, window_y, 0);
 	glutWarpPointer(window_x / 2, window_y / 2);
@@ -108,6 +115,8 @@ void init() {
 	import_objects();
 	create_textures();
 	create_colors();
+
+	cout << "finished loading! " << clock() << endl;
 }
 
 int main(int argc, char* argv[]){
@@ -125,7 +134,7 @@ int main(int argc, char* argv[]){
 	glutPassiveMotionFunc(mouse_func);
 	glutMotionFunc(mouse_func);
 	glutMouseFunc(click_mouse_func);
-	glutSpecialFunc(specialKeys);
+	glutSpecialFunc(special_keys);
 	init();
     
     glutMainLoop();

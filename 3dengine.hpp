@@ -88,7 +88,7 @@ void fill_wall(int x1, int x2, int b1, int b2, int t1, int t2, int co, Sector se
 	glEnd();
 }
 
-void draw_plane(Sector sector) {
+void draw_plane(Sector sector, bool top) {
 	int wx[4], wy[4], wz[4]; 
 	float CS = cos(P.a / 180 * M_PI), SN = sin(P.a / 180 * M_PI);
 	int swp;
@@ -146,20 +146,21 @@ void draw_plane(Sector sector) {
 	int r = color_list[sector.textureID].r;
 	int g = color_list[sector.textureID].g;
 	int b = color_list[sector.textureID].b;
-
-	glBegin(GL_POLYGON);
-		glColor3ub(r,g,b);
-		for (int i = 0; i < tsx.size(); i++){
-			glVertex2i(tsx[i], tsy[i]);
+	if (top){
+		glBegin(GL_POLYGON);
+			glColor3ub(r,g,b);
+			for (int i = 0; i < tsx.size(); i++){
+				glVertex2i(tsx[i], tsy[i]);
+			}
+		glEnd();
+	} else {
+		glBegin(GL_POLYGON);
+		glColor3ub(100,100,100);
+		for (int i = 0; i < bsx.size(); i++){
+			glVertex2i(bsx[i], bsy[i]);
 		}
-	glEnd();
-
-	// glBegin(GL_POLYGON);
-	// glColor3ub(100,100,100);
-	// for (int i = 0; i < bsx.size(); i++){
-	// 	glVertex2i(bsx[i], bsy[i]);
-	// }
-	// glEnd();
+		glEnd();
+	}
 
 }
 
@@ -240,12 +241,30 @@ void draw_texture_3D(Texture texture, int x, int y, int z, float scale = 1) {
 	iy = iz * FOV / iy + window_y / 2;
 
 	draw_texture(texture, ix, iy, scale);
+}
 
-	// glBegin(GL_POINTS);
-	// 	glColor3ub(255,0,255);
-	// 	glVertex2i(ix,iy);
-	// glEnd();
+void draw_text_3D(string str, int x, int y, int z, RGB color, float scale = 1) {
+	int tx, ty, tz;
+	float CS = cos(P.a / 180 * M_PI), SN = sin(P.a / 180 * M_PI);
 
+	scale = FOV * render_scale * scale / distance(x,P.x,y,P.y);
+
+    x = x - P.x;
+	y = y - P.y;
+    z = z - P.z;
+
+	tx = x * CS - y * SN;
+	ty = y * CS + x * SN;
+	tz = z - P.z + ((P.l * ty) / 32);
+	if (ty < 1) { return; }
+	if (sqrt(pow(x,2) + pow(y,2)) < 25){ return; }
+
+	tx = tx * FOV / ty + window_x / 2;
+	ty = tz * FOV / ty + window_y / 2;
+
+	tx -= get_text_sizex(str,scale) / 2;
+
+	draw_text(tx,ty,str,color.r,color.g,color.b,scale);
 }
 
 void draw_world_floor(){

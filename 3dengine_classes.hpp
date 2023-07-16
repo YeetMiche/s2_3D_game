@@ -23,6 +23,7 @@ typedef struct {
 	int cr = 15; //player colission radius
 	float sa = 0;  //screen shake amplitude
 	bool shooting = false;
+	int coins;
 }player; player P;
 
 typedef struct {
@@ -66,6 +67,7 @@ void create_textures(){
 	texture_list.push_back(Texture("./textures/weapon_shoot1_c.bmp", 200,200));	//ID 8
 	texture_list.push_back(Texture("./textures/weapon_shoot2_c.bmp", 200,200));	//ID 9
 	texture_list.push_back(Texture("./textures/barrier_tape_c.bmp", 128,128));	//ID 10
+	texture_list.push_back(Texture("./textures/shopkeep_c.bmp", 16,16));		//ID 11
 }
 
 vector<RGB> color_list;

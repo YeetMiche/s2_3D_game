@@ -3,7 +3,7 @@ import cv2 as cv
 import_path = "./textures/"
 export_path = "./textures/"
 
-file_name = "monster"
+file_name = "shopkeep"
 file_type = ".bmp"
 
 
