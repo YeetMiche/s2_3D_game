@@ -198,9 +198,9 @@ class Menu{
 
     void draw_items(){
         int text_height = get_text_sizey(2) * 3;
-        draw_text(border*1.5, border*1.5, "BUY FACTORY (" + to_string(factories) + ")", 255,255,255,text_scale);
-        draw_text(border*1.5, border*1.5 + text_height, "BUY PRESS  (" + to_string(coin_presses) + ")", 255,255,255,text_scale);
-        draw_text(border*1.5, border*1.5 + 2 * text_height, "BUY NUCLEAR POWER PLANT  (" + to_string(nuclear_PPs) + ")", 255,255,255,text_scale);
+        draw_text(border*1.5, border*1.5, "BUY FACTORY [1 coin per second] (" + to_string(factories) + ")", 255,255,255,text_scale);
+        draw_text(border*1.5, border*1.5 + text_height, "BUY PRESS [10 coins per second] (" + to_string(coin_presses) + ")", 255,255,255,text_scale);
+        draw_text(border*1.5, border*1.5 + 2 * text_height, "BUY NUCLEAR POWER PLANT [100 coins per second] (" + to_string(nuclear_PPs) + ")", 255,255,255,text_scale);
         
         switch(cursor_pos){
             case 0:
