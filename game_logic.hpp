@@ -3,15 +3,57 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include <iostream>
 #include "3dengine.hpp"
 #include "2dengine.hpp"
 #include "3dengine_classes.hpp"
+#include "world_classes.hpp"
 #include "game_math.hpp"
 #include "controlls.hpp"
 
 extern int gameFrame;
+extern const int FPS_LIMIT;
 
 int max_monster = 20;
+
+void import_building(string wall_file_name, string sector_file_name, int xo = 0, int yo = 0){
+    vector<Sector> sectors;
+    vector<Wall> walls;
+
+    ifstream wall_file(wall_file_name);
+
+    if (wall_file.is_open()){
+        char comma;
+        int x1,y1,x2,y2;
+        while (wall_file >> x1 >> comma >> y1 >> comma >> x2 >> comma >> y2){
+            walls.push_back(Wall(x1 + xo,y1 + yo,x2 + xo,y2 + yo));
+        }
+        wall_file.close();
+    }
+
+    ifstream sector_file(sector_file_name);
+
+    if (sector_file.is_open()){
+        char comma;
+        int ws,we,z1,z2;
+        int texID;
+        int isFloor;
+        while (sector_file >> ws >> comma >> we >> comma >> z1 >> comma >> z2 >> comma >> texID >> comma >> isFloor){
+            sectors.push_back(Sector(ws,we,z1,z2,isFloor,texID));
+        }
+
+        sector_file.close();
+    }
+
+    for (int s = 0; s < sectors.size(); s++){
+        int wsa = W.size();
+        for (int w = sectors[s].ws; w <= sectors[s].we; w++){
+            W.push_back(Wall(walls[w].x1, walls[w].y1, walls[w].x2, walls[w].y2));
+        }
+        int wea = W.size() - 1;
+        S.push_back(Sector(wsa,wea, sectors[s].z1, sectors[s].z2, sectors[s].isFloor, sectors[s].textureID));
+    }
+}
 
 class Monster{
     private:
@@ -124,6 +166,80 @@ class Monster{
 
 vector<Monster> monster_list;
 
+class SmokeClouds{
+    private:
+    int x,y,z;
+    float scale;
+
+    public:
+    int entID;
+    bool is_dead = false;
+
+    SmokeClouds(int _x, int _y, int _z){
+        x = _x;
+        y = _y;
+        z = _z;
+        
+        entID = rand();
+        scale = 1 + randPosNeg(10) / 50.0;
+        Obj.push_back(Object(x,y,z,12,1, entID));
+    }
+
+    void update(){
+        z -= 5 + randPosNeg(1);
+        x += rand()%2;
+        y += rand()%3;
+
+        scale -= (rand()%10) / 500.0;
+
+        if (scale <= 0){is_dead = true;}
+
+        int find = entID;
+        for (int f = 0; f < Obj.size(); f++){
+            if (Obj[f].entID == find){
+                Obj[f].x = x;
+                Obj[f].y = y;
+                Obj[f].z = z;
+                Obj[f].scale = scale; 
+            }
+        }
+    }
+};
+
+vector<SmokeClouds> smoke;
+
+class Factory{
+    private:
+    float internal_coins = 0;
+    string wall_file = "./buildings/factory_w.txt";
+    string sector_file = "./buildings/factory_s.txt";
+
+    int xo,yo;
+
+    public:
+    Factory(int _xo = 0, int _yo = 0){
+        import_building(wall_file, sector_file, _xo, _yo);
+        xo = _xo;
+        yo = _yo;
+    }
+
+    void update(){
+        internal_coins += 1.0 / FPS_LIMIT;
+        cout << internal_coins << endl;
+        
+        if (rand()%80 == 0){
+            smoke.push_back(SmokeClouds(600 + xo,-1046 + yo,-400));
+        }
+
+        if (internal_coins >= 1){
+            internal_coins = 0;
+            P.coins += 1;
+        } 
+    }
+};
+
+vector<Factory> factory_list;
+
 class Menu{
     private:
     int border = 100 / render_scale; 
@@ -178,6 +294,7 @@ class Menu{
                     if (factories <= 3 && P.coins >= 100){
                         factories += 1;
                         P.coins -= 100;
+                        factory_list.push_back(Factory(factories * 500));
                     }
                     break;
                 case 1:
@@ -232,7 +349,7 @@ class Menu{
     }
 
     public:
-    bool isOpen = false;
+    bool is_open = false;
 
     Menu(){
         ;
@@ -244,7 +361,7 @@ class Menu{
     }
 
     void update(){
-        if (isOpen){draw();}
+        if (is_open){draw();}
         menu_control();
     }
 };
@@ -271,11 +388,10 @@ class ShopKeep{
 
     void open_menu(){
         if (distance(P.x,x,P.y,y) < 250 && Keys.interact == 1){
-            cout << "Opening Menu!" << endl;
-            menu.isOpen = true;
+            menu.is_open = true;
         }
 
-        if (distance(P.x,x,P.y,y) > 300){menu.isOpen = false;}
+        if (distance(P.x,x,P.y,y) > 300 || Keys.close == 1){menu.is_open = false;}
     }
 
     void update(){
@@ -290,7 +406,7 @@ class Game{
     public:
 
     Game(){
-        P.coins = 0;
+        P.coins = 100;
     }
 
     void update(){
@@ -301,8 +417,27 @@ class Game{
             monster_list[m].update();
         }
         
+        for (int f = 0; f < factory_list.size(); f++){
+            factory_list[f].update();
+        }
+        
+        for (int s = 0; s < smoke.size(); s++){
+            smoke[s].update();
+
+            if (smoke[s].is_dead){
+                int find = smoke[s].entID;
+                for (int f = 0; f < Obj.size(); f++){
+                    if (Obj[f].entID == find){
+                        Obj.erase(Obj.begin() + f);
+                    }
+                }
+                smoke.erase(smoke.begin() + s);
+            }
+        }
+
         shopkeep.update();
         menu.update();
+        
     }
 
     void display_coins(){
@@ -311,7 +446,7 @@ class Game{
 
     void spawn_monster(){
         
-        if (monster_list.size() < max_monster && rand()%100 == 1){
+        if (monster_list.size() < max_monster && rand()%70 == 1){
             monster_list.push_back(Monster());
         }
         for (int i = 0; i < monster_list.size(); i++){

@@ -16,7 +16,9 @@ void import_walls(){
         while (wall_file >> x1 >> comma >> y1 >> comma >> x2 >> comma >> y2){
             W.push_back(Wall(x1,y1,x2,y2));
         } 
+        wall_file.close();
     }
+
 }
 
 void import_sectors(){
@@ -30,7 +32,9 @@ void import_sectors(){
         while (sector_file >> ws >> comma >> we >> comma >> z1 >> comma >> z2 >> comma >> texID >> comma >> isFloor){
             S.push_back(Sector(ws,we,z1,z2,isFloor,texID));
         } 
+        sector_file.close();
     }
+
 }
 
 void import_objects(){
@@ -44,7 +48,9 @@ void import_objects(){
         while (object_file >> x >> comma >> y >> comma >> z >> comma >> texID >> comma >> scale){
             Obj.push_back(Object(x,y,z,texID,scale));
         }
+        object_file.close();
     }
+
 }
 
 void calculate_wall_distance(){

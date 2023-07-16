@@ -9,7 +9,7 @@
 
 using namespace std;
 
-#define FPS_LIMIT 60
+const int FPS_LIMIT = 60;
 
 
 const int render_scale = 4;
@@ -116,7 +116,7 @@ void init() {
 	create_textures();
 	create_colors();
 
-	cout << "finished loading! " << clock() << endl;
+	cout << "finished loading! " << clock() << "\n\n" << endl;
 }
 
 int main(int argc, char* argv[]){

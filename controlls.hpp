@@ -13,7 +13,7 @@ typedef struct {
 	int up,down,left,right; //Look
 	int lctrl,space; //Height
 	int pfov, mfov; //POV change
-	int interact;
+	int interact,close;
 	int au,ad,al,ar;
 }buttonKeys; buttonKeys Keys;
 
@@ -33,6 +33,7 @@ void buttons_up(unsigned char key, int x, int y){
 	if (key=='t'){Keys.mfov=0;}
 
 	if (key=='e'){Keys.interact=0;}
+	if (key=='r'){Keys.close=0;}
 }
 
 void buttons_down(unsigned char key, int x, int y){
@@ -51,6 +52,7 @@ void buttons_down(unsigned char key, int x, int y){
 	if (key=='t'){Keys.mfov=1;}
 
 	if (key=='e'){Keys.interact=1;}
+	if (key=='r'){Keys.close=1;}
 }
 
 

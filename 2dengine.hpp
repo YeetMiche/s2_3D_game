@@ -22,6 +22,8 @@ void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
 			int pixel = static_cast<int>(xi / scale) + static_cast<int>(yi / scale)*texture.vt;
 			if (texture.colors[pixel].g == 255 && texture.colors[pixel].b == 255 && texture.colors[pixel].r == 0){ 
 				;
+			} else if (xi + x < 0 || xi + x > window_x || yi + y < 0 || yi + y > window_y){
+				;
 			} else {
 				glColor3ub(texture.colors[pixel].r,texture.colors[pixel].g ,texture.colors[pixel].b);
 				glVertex2i(xi + x,yi + y);
