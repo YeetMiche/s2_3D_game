@@ -32,8 +32,9 @@ class Sector{
     int textureID;
     float uscale, vscale;
     bool isFloor = false;
+    int secID;
 
-    Sector(int _ws, int _we, int _z1, int _z2, int _isFloor, int _textureID = 0, float _uscale = 1, float _vscale = 1){
+    Sector(int _ws, int _we, int _z1, int _z2, int _isFloor, int _textureID = 0, float _uscale = 1, float _vscale = 1, int _secID = -1){
         ws = _ws;
         we = _we;
         z1 = _z1;
@@ -42,6 +43,7 @@ class Sector{
         textureID = _textureID;
         uscale = _uscale;
         vscale = _vscale;
+        secID = _secID;
     }
 };
 

@@ -30,7 +30,7 @@ void import_sectors(){
         int texID;
         int isFloor;
         while (sector_file >> ws >> comma >> we >> comma >> z1 >> comma >> z2 >> comma >> texID >> comma >> isFloor){
-            S.push_back(Sector(ws,we,z1,z2,isFloor,texID));
+            S.push_back(Sector(ws,we,z1,z2,isFloor,texID,1,1,rand()));
         } 
         sector_file.close();
     }

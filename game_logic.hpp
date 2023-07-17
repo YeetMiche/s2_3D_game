@@ -16,9 +16,11 @@ extern const int FPS_LIMIT;
 
 int max_monster = 20;
 
-void import_building(string wall_file_name, string sector_file_name, int xo = 0, int yo = 0){
+int import_building(string wall_file_name, string sector_file_name, int xo = 0, int yo = 0){
     vector<Sector> sectors;
     vector<Wall> walls;
+
+    int secID;
 
     ifstream wall_file(wall_file_name);
 
@@ -40,6 +42,7 @@ void import_building(string wall_file_name, string sector_file_name, int xo = 0,
         int isFloor;
         while (sector_file >> ws >> comma >> we >> comma >> z1 >> comma >> z2 >> comma >> texID >> comma >> isFloor){
             sectors.push_back(Sector(ws,we,z1,z2,isFloor,texID));
+            
         }
 
         sector_file.close();
@@ -51,34 +54,38 @@ void import_building(string wall_file_name, string sector_file_name, int xo = 0,
             W.push_back(Wall(walls[w].x1, walls[w].y1, walls[w].x2, walls[w].y2));
         }
         int wea = W.size() - 1;
-        S.push_back(Sector(wsa,wea, sectors[s].z1, sectors[s].z2, sectors[s].isFloor, sectors[s].textureID));
+        secID = rand();
+        S.push_back(Sector(wsa,wea, sectors[s].z1, sectors[s].z2, sectors[s].isFloor, sectors[s].textureID,1,1,secID));
     }
+
+    return secID;
 }
 
 class Monster{
     private:
     int spawn_distance = 3000;
     void generate_random_position(){
-        switch(rand()%4){
-        case 0:
-            x = -spawn_distance + rand()%(spawn_distance/2);
-            y = -spawn_distance + rand()%(spawn_distance/2);
-            break;
-        
-        case 1:
-            x = spawn_distance - rand()%(spawn_distance/2);
-            y = -spawn_distance + rand()%(spawn_distance/2);
-            break;
+        bool collides = true;
+        while(collides){
+            int force_quit = 0;
+            switch(rand()%2){
+            case 0:
+                x = -spawn_distance + rand()%(spawn_distance/2);
+                y = -spawn_distance + rand()%(spawn_distance/2);
+                break;
 
-        case 2:
-            x = -spawn_distance + rand()%(spawn_distance/2);
-            y = spawn_distance - rand()%(spawn_distance/2);
-            break;
+            case 1:
+                x = -spawn_distance + rand()%(spawn_distance/2);
+                y = spawn_distance - rand()%(spawn_distance/2);
+                break;
+            }
 
-        case 3:
-            x = spawn_distance - rand()%(spawn_distance/2);
-            y = spawn_distance - rand()%(spawn_distance/2);
-            break;
+            collides = false;
+            for (int w = 0; w < W.size(); w++){
+                if (isCollision(x,y,100,W[w].x1,W[w].y1,W[w].x2,W[w].y2)) {collides = true;}
+            }
+            force_quit += 1; 
+            if (force_quit > 500) {break;}
         }
     }
     
@@ -225,20 +232,79 @@ class Factory{
 
     void update(){
         internal_coins += 1.0 / FPS_LIMIT;
-        cout << internal_coins << endl;
         
-        if (rand()%80 == 0){
-            smoke.push_back(SmokeClouds(600 + xo,-1046 + yo,-400));
-        }
-
         if (internal_coins >= 1){
             internal_coins = 0;
             P.coins += 1;
         } 
+
+        if (rand()%80 == 0){
+            smoke.push_back(SmokeClouds(600 + xo,-1046 + yo,-400));
+        }
+
     }
 };
 
 vector<Factory> factory_list;
+
+class CoinPress{
+    private: 
+    float internal_coins = 0;
+    string wall_file = "./buildings/press_w.txt";
+    string sector_file = "./buildings/press_s.txt";
+
+    int movableSecID;
+
+    int pressZ = 0;
+
+    int xo,yo;
+
+    int timeOffset;
+
+    public:
+    CoinPress(int _xo = 0, int _yo = 0){
+        movableSecID = import_building(wall_file, sector_file, _xo, _yo);
+        cout << movableSecID << endl << endl;
+        xo = _xo;
+        yo = _yo;
+
+        timeOffset = rand();
+
+        for (int s = 0; s < S.size(); s++){
+            cout << S[s].secID << endl;
+        }
+    }
+
+    void update(){
+        internal_coins += 10.0 / FPS_LIMIT;
+
+        pressZ = sin(gameFrame/40.0 + timeOffset) * 40 - 80;
+        
+
+        int find = movableSecID;
+        for (int f = 0; f < S.size(); f++){
+            if (S[f].secID == find){
+                S[f].z1 = pressZ;
+                S[f].z2 = pressZ + 80;
+                
+                cout << S[f].z1 << ",";
+                cout << S[f].z2 << endl;;
+            }
+        }
+
+
+        if (internal_coins >= 1){
+            internal_coins = 0;
+            P.coins += 1;
+        }
+    }
+};
+
+vector<CoinPress> press_list;
+
+class NuclearPowerPlant{
+    
+};
 
 class Menu{
     private:
@@ -291,20 +357,21 @@ class Menu{
         if (Keys.ar == 1){
             switch(cursor_pos){
                 case 0:
-                    if (factories <= 3 && P.coins >= 100){
+                    if (factories < 10 && P.coins >= 100){
                         factories += 1;
                         P.coins -= 100;
                         factory_list.push_back(Factory(factories * 500));
                     }
                     break;
                 case 1:
-                    if (coin_presses <= 3 && P.coins >= 1000){
+                    if (coin_presses < 10 && P.coins >= 1000){
                         coin_presses += 1;
                         P.coins -= 1000;
+                        press_list.push_back(CoinPress(coin_presses * 500));
                     }
                     break;
                 case 2:
-                    if (nuclear_PPs <= 3 && P.coins >= 10000){
+                    if (nuclear_PPs < 3 && P.coins >= 10000){
                         nuclear_PPs += 1;
                         P.coins -= 10000;
                     }
@@ -406,7 +473,7 @@ class Game{
     public:
 
     Game(){
-        P.coins = 100;
+        P.coins = 10000;
     }
 
     void update(){
@@ -419,6 +486,11 @@ class Game{
         
         for (int f = 0; f < factory_list.size(); f++){
             factory_list[f].update();
+        }
+
+
+        for (int p = 0; p < press_list.size(); p++){
+            press_list[p].update();
         }
         
         for (int s = 0; s < smoke.size(); s++){
