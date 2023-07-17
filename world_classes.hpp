@@ -56,6 +56,7 @@ class Object{
     int textureID;
     bool isEnemy = false;
     int entID;
+    bool beenDrawn = false;
 
     Object(int _x, int _y, int _z, int _textureID = 0, float _scale = 1, int _entID = -1){
         x = _x, y = _y, z = _z;

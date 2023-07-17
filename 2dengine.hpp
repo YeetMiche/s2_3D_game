@@ -12,7 +12,7 @@ using namespace std;
 
 
 void draw_texture(Texture texture, int x = 0, int y = 0, float scale = 1){
-	
+
 	x = x - texture.ht/2*scale;
 	y = y - texture.vt/2*scale;
 	glPixelZoom(2,2);

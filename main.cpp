@@ -11,6 +11,7 @@ using namespace std;
 
 const int FPS_LIMIT = 60;
 
+const int player_start_coins = 100000;
 
 const int render_scale = 4;
 int window_x = 480;
@@ -37,7 +38,7 @@ int FOV = 200;
 
 void display(){
 	fps_limit_start = clock();
-	
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	move_player();
@@ -57,6 +58,14 @@ void display(){
 
 	draw_enviroment();
 	draw_world_floor();
+
+	float overall_time = 0;
+	int draw_calls = 0;
+
+	for (int o = 0; o < Obj.size(); o++){
+		Obj[o].beenDrawn = false;
+	}
+
 	for (int s = 0; s < S.size(); s++){
 		for (int w = S[s].ws; w<=S[s].we; w++){
 			if (S[s].isFloor == false){
@@ -65,9 +74,10 @@ void display(){
 				draw_plane(S[s],true);
 			}
 			for (int o = 0; o < Obj.size(); o++){
-				if (distance(Obj[o].x, P.x, Obj[o].y, P.y) < W[w].distance){
+				if (distance(Obj[o].x, P.x, Obj[o].y, P.y) < W[w].distance && Obj[o].beenDrawn == false){
 					int id = Obj[o].textureID;
 					draw_texture_3D(texture_list[id], Obj[o].x, Obj[o].y, Obj[o].z, Obj[o].scale);
+					Obj[o].beenDrawn = true;
 				}
 			}
 
@@ -75,11 +85,11 @@ void display(){
 		}
 	}
 
-
 	draw_weapon();
 	draw_crosshair(window_x/2, window_y/2, 2);
 	
 	game.update();
+	
 
 	while ((fps_limit_start + 1000/FPS_LIMIT) - clock() > 0){
 		;
@@ -101,6 +111,7 @@ void display(){
 	Keys.ad = 0;
 	Keys.al = 0;
 	Keys.ar = 0;
+
 }	
 
 void init() {

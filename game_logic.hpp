@@ -13,6 +13,7 @@
 
 extern int gameFrame;
 extern const int FPS_LIMIT;
+extern const int player_start_coins;
 
 int max_monster = 20;
 
@@ -98,10 +99,13 @@ class Monster{
     int texID = 5;
     int entID;
 
-    Monster(bool isStrong = false){
-        if (isStrong == true){
+    bool isStrong;
+
+    Monster(bool _isStrong = false){
+        if (_isStrong == true){
             health = 200;
             texID = 6;
+            isStrong = true;
         }
 
 
@@ -121,6 +125,10 @@ class Monster{
 
             if (da >= -range && da <= range){
                 health -= 10;
+
+                if (isStrong){
+                    P.coins += 10;
+                }
             }
 
             if (health <= 0){
@@ -264,15 +272,10 @@ class CoinPress{
     public:
     CoinPress(int _xo = 0, int _yo = 0){
         movableSecID = import_building(wall_file, sector_file, _xo, _yo);
-        cout << movableSecID << endl << endl;
         xo = _xo;
         yo = _yo;
 
         timeOffset = rand();
-
-        for (int s = 0; s < S.size(); s++){
-            cout << S[s].secID << endl;
-        }
     }
 
     void update(){
@@ -286,9 +289,6 @@ class CoinPress{
             if (S[f].secID == find){
                 S[f].z1 = pressZ;
                 S[f].z2 = pressZ + 80;
-                
-                cout << S[f].z1 << ",";
-                cout << S[f].z2 << endl;;
             }
         }
 
@@ -497,7 +497,7 @@ class Game{
     public:
 
     Game(){
-        P.coins = 100000;
+        P.coins = player_start_coins;
     }
 
     void update(){
@@ -547,7 +547,12 @@ class Game{
     void spawn_monster(){
         
         if (monster_list.size() < max_monster && rand()%70 == 1){
-            monster_list.push_back(Monster());
+            if (rand()%10 == 0){
+                monster_list.push_back(Monster(true));
+            } else {
+                monster_list.push_back(Monster());
+            }
+            
         }
         for (int i = 0; i < monster_list.size(); i++){
             if (monster_list[i].isDead) {
