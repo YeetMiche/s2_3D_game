@@ -362,6 +362,8 @@ class Menu{
     }
 
     void menu_control(){
+        if (is_open == false) {return;}
+        
         if (Keys.ad == 1){
             cursor_pos += 1;
         }
