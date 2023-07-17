@@ -69,6 +69,7 @@ void create_textures(){
 	texture_list.push_back(Texture("./textures/barrier_tape_c.bmp", 128,128));	//ID 10
 	texture_list.push_back(Texture("./textures/shopkeep_c.bmp", 16,16));		//ID 11
 	texture_list.push_back(Texture("./textures/smoke1_c.bmp", 64,64));			//ID 12
+	texture_list.push_back(Texture("./textures/GRAYPOIS_c.bmp", 64,64));		//ID 13
 }
 
 vector<RGB> color_list;

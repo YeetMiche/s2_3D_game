@@ -303,8 +303,31 @@ class CoinPress{
 vector<CoinPress> press_list;
 
 class NuclearPowerPlant{
-    
+    private:
+    float internal_coins = 0;
+    string wall_file = "./buildings/nuclearPP_w.txt";
+    string sector_file = "./buildings/nuclearPP_s.txt";
+
+    int xo,yo;
+
+    public:
+    NuclearPowerPlant(int _xo = 0, int _yo = 0){
+        import_building(wall_file, sector_file, _xo, _yo);
+        xo = _xo;
+        yo = _yo;
+    }
+
+    void update(){
+        internal_coins += 100.0 / FPS_LIMIT;
+
+        if (internal_coins >= 1){
+            internal_coins = 0;
+            P.coins += 1;
+        }
+    }
 };
+
+vector<NuclearPowerPlant> nuclearPP_list;
 
 class Menu{
     private:
@@ -374,6 +397,7 @@ class Menu{
                     if (nuclear_PPs < 3 && P.coins >= 10000){
                         nuclear_PPs += 1;
                         P.coins -= 10000;
+                        nuclearPP_list.push_back(NuclearPowerPlant(nuclear_PPs * 2500));
                     }
                     break;
             }
@@ -473,7 +497,7 @@ class Game{
     public:
 
     Game(){
-        P.coins = 10000;
+        P.coins = 100000;
     }
 
     void update(){
@@ -491,6 +515,10 @@ class Game{
 
         for (int p = 0; p < press_list.size(); p++){
             press_list[p].update();
+        }
+
+        for (int i = 0; i < nuclearPP_list.size(); i++){
+            nuclearPP_list[i].update();
         }
         
         for (int s = 0; s < smoke.size(); s++){
