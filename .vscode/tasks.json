@@ -4,7 +4,7 @@
         {
             "type": "cppbuild",
             "label": "C/C++: gcc.exe Aktive Datei kompilieren",
-            "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+            "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
@@ -14,7 +14,8 @@
                 "-lopengl32",
                 "-lglu32",
                 "-lfreeglut",
-                "-lstdc++"
+                "-lstdc++",
+                "-lsfml-audio"
             ],
             "options": {
                 "cwd": "${fileDirname}"
