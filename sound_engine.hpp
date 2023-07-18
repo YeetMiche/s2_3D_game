@@ -79,6 +79,17 @@ class Sound{
 
 };
 
+vector<int> sound_handler(int volume, int x, int y){
+    float distanceVol = volume - distance(P.x,x,P.y,y) / 10;
+    float angle = calculate_angle(-P.x,P.y,-x,y) + 90 - P.a - 180;
+
+    vector<int> vol_l_r;
+    vol_l_r.push_back(distanceVol - sin(angle/180*M_PI) * distanceVol);
+    vol_l_r.push_back(distanceVol + sin(angle/180*M_PI) * distanceVol);
+
+    return vol_l_r;
+}
+
 
 
 
