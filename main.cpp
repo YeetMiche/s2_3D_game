@@ -7,6 +7,7 @@
 #include <string>
 #include <GL/freeglut.h>
 
+
 using namespace std;
 
 const int FPS_LIMIT = 60;
@@ -111,7 +112,6 @@ void display(){
 	Keys.ad = 0;
 	Keys.al = 0;
 	Keys.ar = 0;
-
 }	
 
 void init() {

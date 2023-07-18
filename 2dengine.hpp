@@ -7,6 +7,7 @@
 #include <string>
 #include <math.h>
 #include "world_classes.hpp"
+#include "sound_engine.hpp"
 
 using namespace std;
 

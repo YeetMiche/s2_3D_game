@@ -10,6 +10,8 @@
 #include "world_classes.hpp"
 #include "game_math.hpp"
 #include "controlls.hpp"
+#include <SFML/Audio.hpp>
+#include "sound_engine.hpp"
 
 extern int gameFrame;
 extern const int FPS_LIMIT;
@@ -229,6 +231,9 @@ class Factory{
     string wall_file = "./buildings/factory_w.txt";
     string sector_file = "./buildings/factory_s.txt";
 
+    int x = 707;
+    int y = -1143;
+
     int xo,yo;
 
     public:
@@ -249,7 +254,6 @@ class Factory{
         if (rand()%80 == 0){
             smoke.push_back(SmokeClouds(600 + xo,-1046 + yo,-400));
         }
-
     }
 };
 
@@ -471,6 +475,8 @@ class ShopKeep{
 
     ShopKeep(){
         Obj.push_back(Object(x,y,z,texID,scale));
+
+        
     }
 
     void draw_text(){
@@ -496,15 +502,25 @@ class ShopKeep{
 ShopKeep shopkeep;
 
 class Game{
+    private:
+    Sound sound = Sound("./sounds/sound.wav", 0);
+    
+    void check_gun_sound(){
+        if (P.shooting){sound.set_volume(100,100);} else {sound.set_volume(0,0);}
+
+        if (sound.is_playing() == false) {sound = Sound("sound.wav",0);}
+    }
+    
     public:
 
     Game(){
         P.coins = player_start_coins;
     }
-
+    
     void update(){
         display_coins();
         spawn_monster();
+        check_gun_sound();
 
         for (int m = 0; m < monster_list.size(); m++){
             monster_list[m].update();
