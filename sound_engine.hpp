@@ -56,7 +56,7 @@ class Sound{
 
         left_sound.play();
         right_sound.play();
-        cout << "Now Playing..." << file_name << endl;
+        // cout << "Now Playing..." << file_name << endl;
     }
 
     void set_volume(float r, float l){
