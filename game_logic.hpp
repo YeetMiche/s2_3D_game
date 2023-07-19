@@ -343,6 +343,8 @@ class Menu{
     int cursor_pos = 0;
     float text_scale = 2.5;
 
+    Sound sound = Sound("./sounds/menu_sound.wav",0);
+
     void draw_BG(){
         glBegin(GL_QUADS);
             glColor3ub(60,40,40);
@@ -370,10 +372,12 @@ class Menu{
         
         if (Keys.ad == 1){
             cursor_pos += 1;
+            sound.play();
         }
 
         if (Keys.au == 1){
             cursor_pos -= 1;
+            sound.play();
         }
 
         if (cursor_pos > 2){
@@ -384,6 +388,7 @@ class Menu{
         }
 
         if (Keys.ar == 1){
+            sound.play();
             switch(cursor_pos){
                 case 0:
                     if (factories < 10 && P.coins >= 100){
@@ -458,7 +463,7 @@ class Menu{
     }
 
     void update(){
-        if (is_open){draw();}
+        if (is_open){draw(); sound.set_volume(100,100);}
         menu_control();
     }
 };
