@@ -1,14 +1,14 @@
 import cv2 as cv
 
-import_path = "./textures/"
+import_path = "./doom_textures/"
 export_path = "./textures/"
 
-file_name = "shopkeep"
-file_type = ".bmp"
+file_name = "GRAYPOIS"
+file_type = ".png"
 
 
-x_size = 16
-y_size = 16
+x_size = 64
+y_size = 64
 
 
 img = cv.imread(import_path + file_name + file_type, cv.IMREAD_COLOR)
