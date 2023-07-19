@@ -504,14 +504,14 @@ ShopKeep shopkeep;
 class Game{
     private:
     Sound gun_sound = Sound("./sounds/shot.wav", 0);
-    Sound game_music = Sound("./sounds/game_music.wav",50);
+    Sound game_music = Sound("./sounds/game_music.wav",100);
     
     void check_gun_sound(){
         if (P.shooting && !gun_sound.is_playing()){gun_sound.set_volume(30,30); gun_sound.play();} 
     }
 
     void check_game_music(){
-        if (!game_music.is_playing()) {game_music = Sound("./sounds/game_music.wav",50);}
+        if (!game_music.is_playing()) {game_music.play();}
     }
     
     public:
@@ -524,6 +524,7 @@ class Game{
         display_coins();
         spawn_monster();
         check_gun_sound();
+        check_game_music();
 
         for (int m = 0; m < monster_list.size(); m++){
             monster_list[m].update();
