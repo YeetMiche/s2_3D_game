@@ -12,7 +12,7 @@ using namespace std;
 
 const int FPS_LIMIT = 60;
 
-const int player_start_coins = 100000;
+const int player_start_coins = 50;
 
 const int render_scale = 4;
 int window_x = 480;

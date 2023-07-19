@@ -77,6 +77,11 @@ class Sound{
         }
     }
 
+    void play(){
+        left_sound.play();
+        right_sound.play();
+    }
+
 };
 
 vector<int> sound_handler(int volume, int x, int y){

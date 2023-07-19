@@ -503,12 +503,11 @@ ShopKeep shopkeep;
 
 class Game{
     private:
-    Sound gun_sound = Sound("./sounds/sound.wav", 0);
+    Sound gun_sound = Sound("./sounds/shot.wav", 0);
     Sound game_music = Sound("./sounds/game_music.wav",50);
+    
     void check_gun_sound(){
-        if (P.shooting){gun_sound.set_volume(100,100);} else {gun_sound.set_volume(0,0);}
-
-        if (gun_sound.is_playing() == false) {gun_sound = Sound("sound.wav",0);}
+        if (P.shooting && !gun_sound.is_playing()){gun_sound.set_volume(30,30); gun_sound.play();} 
     }
 
     void check_game_music(){
